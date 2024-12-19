@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TRANSFORM_H
+#define TRANSFORM_H
 
 #include <SFML/System/Vector2.hpp>
 #include "Component.h"
@@ -11,3 +12,5 @@ class Transform : public Component {
 
   Transform();
 };
+
+#endif  // TRANSFORM_H

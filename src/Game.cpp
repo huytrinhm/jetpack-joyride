@@ -5,6 +5,9 @@
 #include <ctime>
 #include <iostream>
 #include <vector>
+#include "Engine/GameManager.h"
+#include "Engine/GameObjectManager.h"
+#include "Player.h"
 
 // Constants
 const int WINDOW_WIDTH = 800;
@@ -45,6 +48,15 @@ int main() {
 
   updateLetterbox(window, renderSprite, WINDOW_WIDTH, WINDOW_HEIGHT);
 
+  GameManager& game = GameManager::Instance();
+  game.renderTarget = &renderTexture;
+
+  GameObjectManager gameObjectManager;
+  auto player = std::make_unique<Player>();
+  gameObjectManager.AddGameObject(std::move(player));
+
+  gameObjectManager.Start();
+
   // Main game loop
   sf::Clock clock;
 
@@ -61,7 +73,8 @@ int main() {
     }
 
     // Update
-    float deltaTime = clock.restart().asSeconds();
+    game.deltaTime = clock.restart().asSeconds();
+    gameObjectManager.Update();
 
     renderTexture.clear(sf::Color::Black);
     renderTexture.display();

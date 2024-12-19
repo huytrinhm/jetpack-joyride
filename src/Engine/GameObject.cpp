@@ -1,4 +1,5 @@
 #include "Engine/GameObject.h"
+#include "Engine/Animator.h"
 
 GameObject::GameObject(const std::string& name) : name(name) {
   transform.gameObject = this;
@@ -38,5 +39,8 @@ T* GameObject::GetComponent() {
 }
 
 // Explicit template instantiations
-template Transform* GameObject::AddComponent<Transform>();
-template Transform* GameObject::GetComponent<Transform>();
+template Transform* GameObject::AddComponent();
+template Transform* GameObject::GetComponent();
+
+template Animator* GameObject::AddComponent(sf::Texture&);
+template Animator* GameObject::GetComponent();

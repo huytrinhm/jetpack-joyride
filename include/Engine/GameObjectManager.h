@@ -1,5 +1,7 @@
-#pragma once
+#ifndef GAMEOBJECTMANAGER_H
+#define GAMEOBJECTMANAGER_H
 
+#include <SFML/Graphics.hpp>
 #include <memory>
 #include <vector>
 #include "GameObject.h"
@@ -13,3 +15,5 @@ class GameObjectManager {
   void Start();
   void Update();
 };
+
+#endif  // GAMEOBJECTMANAGER_H

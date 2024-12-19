@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GAMEOBJECT_H
+#define GAMEOBJECT_H
 
 #include <memory>
 #include <string>
@@ -25,3 +26,5 @@ class GameObject {
   virtual void Start();
   virtual void Update();
 };
+
+#endif  // GAMEOBJECT_H
