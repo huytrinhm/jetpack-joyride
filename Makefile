@@ -9,7 +9,7 @@ TARGET = build/game
 SOURCES = $(shell find $(SRCDIR) -name '*.cpp')
 OBJECTS = $(patsubst $(SRCDIR)/%.cpp, $(BUILDDIR)/%.o, $(SOURCES))
 
-all: $(TARGET) copy-sfml-binaries
+all: $(TARGET) copy-sfml-binaries copy-assets
 
 $(TARGET): $(OBJECTS)
 	@mkdir -p $(@D)
@@ -22,7 +22,11 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.cpp
 copy-sfml-binaries:
 	cp external/SFML-2.6.2/bin/*.dll $(BUILDDIR)
 
+# Rule to copy assets to the build directory
+copy-assets:
+	cp -r assets $(BUILDDIR)
+
 clean:
 	rm -rf $(BUILDDIR) $(TARGET)
 
-.PHONY: all clean copy-sfml-binaries
+.PHONY: all clean copy-sfml-binaries copy-assets
