@@ -6,7 +6,7 @@ SRCDIR = src
 BUILDDIR = build
 TARGET = build/game
 
-SOURCES = $(wildcard $(SRCDIR)/*.cpp)
+SOURCES = $(shell find $(SRCDIR) -name '*.cpp')
 OBJECTS = $(patsubst $(SRCDIR)/%.cpp, $(BUILDDIR)/%.o, $(SOURCES))
 
 all: $(TARGET) copy-sfml-binaries
@@ -16,7 +16,7 @@ $(TARGET): $(OBJECTS)
 	$(CXX) $(OBJECTS) -o $@ $(LDFLAGS)
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.cpp
-	@mkdir -p $(@D)
+	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 copy-sfml-binaries:
