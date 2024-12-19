@@ -5,16 +5,23 @@ GameObject::GameObject(const std::string& name) : name(name) {
   transform.gameObject = this;
 }
 
-void GameObject::Start() {
+void GameObject::Start() {}
+void GameObject::Update() {}
+
+void GameObject::DoStart() {
   for (const auto& component : components) {
     component->Start();
   }
+
+  Start();
 }
 
-void GameObject::Update() {
+void GameObject::DoUpdate() {
   for (const auto& component : components) {
     component->Update();
   }
+
+  Update();
 }
 
 template <typename T, typename... Args>

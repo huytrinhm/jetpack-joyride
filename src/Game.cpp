@@ -5,24 +5,16 @@
 #include <ctime>
 #include <iostream>
 #include <vector>
+#include "Config.h"
 #include "Engine/GameManager.h"
 #include "Engine/GameObjectManager.h"
 #include "Player.h"
 
-// Constants
-const int WINDOW_WIDTH = 800;
-const int WINDOW_HEIGHT = 600;
-
-// World size constants
-const int WORLD_WIDTH = 640;
-const int WORLD_HEIGHT = 360;
-
-void updateLetterbox(sf::RenderWindow& window,
-                     sf::Sprite& renderSprite,
-                     int windowWidth,
-                     int windowHeight) {
-  float scaleX = static_cast<float>(windowWidth) / WORLD_WIDTH;
-  float scaleY = static_cast<float>(windowHeight) / WORLD_HEIGHT;
+void updateLetterbox(sf::RenderWindow& window, sf::Sprite& renderSprite) {
+  float windowWidth = static_cast<float>(window.getSize().x);
+  float windowHeight = static_cast<float>(window.getSize().y);
+  float scaleX = windowWidth / WORLD_WIDTH;
+  float scaleY = windowHeight / WORLD_HEIGHT;
   float scale = std::min(scaleX, scaleY);
   float offsetX = (windowWidth - WORLD_WIDTH * scale) / 2;
   float offsetY = (windowHeight - WORLD_HEIGHT * scale) / 2;
@@ -46,7 +38,7 @@ int main() {
   renderTexture.create(WORLD_WIDTH, WORLD_HEIGHT);
   sf::Sprite renderSprite(renderTexture.getTexture());
 
-  updateLetterbox(window, renderSprite, WINDOW_WIDTH, WINDOW_HEIGHT);
+  updateLetterbox(window, renderSprite);
 
   GameManager& game = GameManager::Instance();
   game.renderTarget = &renderTexture;
@@ -55,7 +47,7 @@ int main() {
   auto player = std::make_unique<Player>();
   gameObjectManager.AddGameObject(std::move(player));
 
-  gameObjectManager.Start();
+  gameObjectManager.StartAll();
 
   // Main game loop
   sf::Clock clock;
@@ -67,16 +59,15 @@ int main() {
       if (event.type == sf::Event::Closed)
         window.close();
       else if (event.type == sf::Event::Resized) {
-        updateLetterbox(window, renderSprite, event.size.width,
-                        event.size.height);
+        updateLetterbox(window, renderSprite);
       }
     }
 
     // Update
     game.deltaTime = clock.restart().asSeconds();
-    gameObjectManager.Update();
 
     renderTexture.clear(sf::Color::Black);
+    gameObjectManager.UpdateAll();
     renderTexture.display();
 
     window.clear();

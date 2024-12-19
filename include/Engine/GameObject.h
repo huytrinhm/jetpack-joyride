@@ -23,6 +23,9 @@ class GameObject {
   template <typename T>
   T* GetComponent();
 
+  void DoStart();
+  void DoUpdate();
+
   virtual void Start();
   virtual void Update();
 };

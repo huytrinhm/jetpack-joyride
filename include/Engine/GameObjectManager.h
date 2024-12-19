@@ -12,8 +12,8 @@ class GameObjectManager {
 
  public:
   void AddGameObject(std::unique_ptr<GameObject> gameObject);
-  void Start();
-  void Update();
+  void StartAll();
+  void UpdateAll();
 };
 
 #endif  // GAMEOBJECTMANAGER_H
