@@ -50,5 +50,7 @@ void Animator::Update() {
     sprite.setTextureRect(animations[currentAnimation].GetFrame(currentFrame));
   }
   sprite.setPosition(Component::gameObject->transform.position);
+  sprite.setScale(Component::gameObject->transform.scale);
+  sprite.setRotation(Component::gameObject->transform.rotation);
   GameManager::Instance().renderTarget->draw(sprite);
 }
