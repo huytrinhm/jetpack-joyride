@@ -6,40 +6,34 @@ Player::Player(const std::string& name) : GameObject(name) {
   auto animator = AddComponent<Animator>(texture);
 
   animator->AddAnimation("running");
-  animator->AddFrameToAnimation("running", 0, 0, 32, 48, 0.1f);
-  animator->AddFrameToAnimation("running", 32, 0, 32, 48, 0.1f);
-  animator->AddFrameToAnimation("running", 64, 0, 32, 48, 0.1f);
-  animator->AddFrameToAnimation("running", 96, 0, 32, 48, 0.1f);
+  for (int i = 0; i < 4; i++)
+    animator->AddFrameToAnimation("running", i * 48, 0 * 72, 48, 72, 0.1f);
 
   animator->AddAnimation("flying");
-  animator->AddFrameToAnimation("flying", 0, 48, 32, 48, 0.1f);
-  animator->AddFrameToAnimation("flying", 32, 48, 32, 48, 0.1f);
-  animator->AddFrameToAnimation("flying", 64, 48, 32, 48, 0.1f);
-  animator->AddFrameToAnimation("flying", 96, 48, 32, 48, 0.1f);
+  for (int i = 0; i < 4; i++)
+    animator->AddFrameToAnimation("flying", i * 48, 1 * 72, 48, 72, 0.1f);
 
   animator->AddAnimation("falling");
-  animator->AddFrameToAnimation("falling", 0, 96, 32, 48, 0.1f);
-  animator->AddFrameToAnimation("falling", 32, 96, 32, 48, 0.1f);
-  animator->AddFrameToAnimation("falling", 64, 96, 32, 48, 0.1f);
-  animator->AddFrameToAnimation("falling", 96, 96, 32, 48, 0.1f);
+  for (int i = 0; i < 4; i++)
+    animator->AddFrameToAnimation("falling", i * 48, 2 * 72, 48, 72, 0.1f);
 
   animator->AddAnimation("landing");
-  animator->AddFrameToAnimation("landing", 0, 144, 32, 48, 0.1f);
-  animator->AddFrameToAnimation("landing", 32, 144, 32, 48, 0.1f);
-  animator->AddFrameToAnimation("landing", 64, 144, 32, 48, 0.1f);
-  animator->AddFrameToAnimation("landing", 96, 144, 32, 48, 0.1f);
+  for (int i = 0; i < 4; i++)
+    animator->AddFrameToAnimation("landing", i * 48, 3 * 72, 48, 72, 0.1f);
 
   animator->AddAnimation("dead");
-  animator->AddFrameToAnimation("dead", 0, 288, 32, 48, 0.1f);
-  animator->AddFrameToAnimation("dead", 32, 288, 32, 48, 0.1f);
-  animator->AddFrameToAnimation("dead", 64, 288, 32, 48, 0.1f);
-  animator->AddFrameToAnimation("dead", 96, 288, 32, 48, 0.1f);
+  for (int i = 0; i < 4; i++)
+    animator->AddFrameToAnimation("dead", i * 48, 4 * 72, 48, 72, 0.1f);
+
+  animator->AddAnimation("dead_falling");
+  for (int i = 0; i < 4; i++)
+    animator->AddFrameToAnimation("dead_falling", i * 48, 6 * 72, 48, 72, 0.1f);
 
   animator->AddAnimation("laying");
-  animator->AddFrameToAnimation("laying", 32, 336, 32, 48, 0.1f);
-  animator->AddFrameToAnimation("laying", 0, 336, 32, 48, 0.1f);
+  animator->AddFrameToAnimation("laying", 48, 7 * 72, 48, 72, 0.1f);
+  animator->AddFrameToAnimation("laying", 0, 7 * 72, 48, 72, 0.1f);
 
-  animator->PlayAnimation("laying");
+  animator->PlayAnimation("dead_falling");
 }
 
 void Player::Start() {
