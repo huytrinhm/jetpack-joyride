@@ -6,6 +6,7 @@
 #include <iostream>
 #include <vector>
 #include "Config.h"
+#include "Engine/AssetManager.h"
 #include "Engine/GameManager.h"
 #include "Engine/GameObjectManager.h"
 #include "Player.h"
@@ -39,6 +40,8 @@ int main() {
   sf::Sprite renderSprite(renderTexture.getTexture());
 
   updateLetterbox(window, renderSprite);
+
+  AssetManager::Instance().Initialize();
 
   GameManager& game = GameManager::Instance();
   game.renderTarget = &renderTexture;

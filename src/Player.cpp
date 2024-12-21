@@ -1,8 +1,9 @@
 #include "Player.h"
 #include "Engine/Animator.h"
+#include "Engine/AssetManager.h"
 
 Player::Player(const std::string& name) : GameObject(name) {
-  texture.loadFromFile("assets/barry.png");
+  auto& texture = AssetManager::Instance().GetTexture("barry");
   auto animator = AddComponent<Animator>(texture);
 
   animator->AddAnimation("running");
