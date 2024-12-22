@@ -22,6 +22,7 @@ class BackgroundRenderer : public GameObject {
   std::vector<Room> rooms;
   float scrollSpeed;
   size_t currentRoomIndex;
+  float currentLength;
 };
 
 #endif  // BACKGROUNDRENDERER_H

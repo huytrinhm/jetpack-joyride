@@ -56,5 +56,5 @@ void Animator::Render(GameRenderer& renderer) {
   if (currentAnimation.empty())
     return;
 
-  renderer.AddDrawable(1, &sprite);
+  renderer.AddDrawable(2, &sprite);
 }

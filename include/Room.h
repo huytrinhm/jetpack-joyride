@@ -8,12 +8,15 @@
 class Room {
  public:
   Room(const std::string& atlasName,
+       float roomLength,
        const sf::IntRect& startRect,
        const sf::IntRect& endRect,
        const std::vector<std::pair<sf::IntRect, float>>& mainRects);
   const Patch& getStartPatch() const;
   const Patch& getEndPatch() const;
   const Patch& getRandomMainPatch() const;
+
+  float roomLength;
 
  private:
   Patch startPatch;

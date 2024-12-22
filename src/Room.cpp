@@ -3,14 +3,16 @@
 #include "AssetManager.h"
 
 Room::Room(const std::string& atlasName,
+           float roomLength,
            const sf::IntRect& startRect,
            const sf::IntRect& endRect,
            const std::vector<std::pair<sf::IntRect, float>>& mainRects)
-    : startPatch(AssetManager::Instance().GetTexture(atlasName), startRect),
-      endPatch(AssetManager::Instance().GetTexture(atlasName), endRect) {
+    : roomLength(roomLength),
+      startPatch(AssetManager::Instance().GetTexture(atlasName), startRect, 0),
+      endPatch(AssetManager::Instance().GetTexture(atlasName), endRect, 1) {
   for (const auto& rect : mainRects) {
     mainPatches.emplace_back(AssetManager::Instance().GetTexture(atlasName),
-                             rect.first);
+                             rect.first, 0);
     probabilities.push_back(rect.second);
   }
 }

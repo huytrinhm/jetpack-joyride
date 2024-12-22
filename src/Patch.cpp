@@ -1,9 +1,9 @@
 #include "Patch.h"
 
-Patch::Patch(const sf::Texture& texture, const sf::IntRect& rect) {
-  sprite.setTexture(texture);
-  sprite.setTextureRect(rect);
-}
+Patch::Patch(const sf::Texture& texture,
+             const sf::IntRect& rect,
+             size_t layerIndex)
+    : layerIndex(layerIndex), sprite(texture, rect) {}
 
 const sf::Sprite& Patch::getSprite() const {
   return sprite;
@@ -11,6 +11,7 @@ const sf::Sprite& Patch::getSprite() const {
 
 ActivePatch::ActivePatch(const Patch& patchTemplate, float x, float y) {
   sprite = patchTemplate.getSprite();
+  layerIndex = patchTemplate.layerIndex;
   sprite.setPosition(x, y);
 }
 
@@ -23,5 +24,5 @@ bool ActivePatch::isOffScreen(float screenWidth) const {
 }
 
 void ActivePatch::Render(GameRenderer& renderer) const {
-  renderer.AddDrawable(0, &sprite);
+  renderer.AddDrawable(layerIndex, &sprite);
 }

@@ -8,6 +8,7 @@ void BackgroundRenderer::Start() {
   currentRoomIndex = 0;
   activePatches.emplace_back(rooms[currentRoomIndex].getStartPatch(), 0,
                              transform.position.y);
+  currentLength = activePatches.back().sprite.getGlobalBounds().width;
 }
 
 BackgroundRenderer::BackgroundRenderer(const std::string& name,
@@ -42,21 +43,23 @@ void BackgroundRenderer::Update() {
             ? WORLD_WIDTH
             : activePatches.back().sprite.getPosition().x +
                   activePatches.back().sprite.getGlobalBounds().width;
-    if (currentRoomIndex < rooms.size()) {
+    if (currentLength < rooms[currentRoomIndex].roomLength) {
       activePatches.emplace_back(rooms[currentRoomIndex].getRandomMainPatch(),
                                  transform.position.x + newPatchX,
                                  transform.position.y);
+      currentLength += activePatches.back().sprite.getGlobalBounds().width;
     } else {
       // Handle room transition
       activePatches.emplace_back(rooms[currentRoomIndex].getEndPatch(),
                                  transform.position.x + newPatchX,
                                  transform.position.y);
-      currentRoomIndex = (currentRoomIndex + 1) % rooms.size();
+      currentRoomIndex = (rand() % (rooms.size() - 1)) + 1;
       activePatches.emplace_back(
           rooms[currentRoomIndex].getStartPatch(),
           transform.position.x + newPatchX +
               activePatches.back().sprite.getGlobalBounds().width - 128,
           transform.position.y);
+      currentLength = activePatches.back().sprite.getGlobalBounds().width;
     }
   }
 }

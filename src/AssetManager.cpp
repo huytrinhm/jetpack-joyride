@@ -12,6 +12,9 @@ void AssetManager::LoadTexture(const std::string& name,
 void AssetManager::Initialize() {
   LoadTexture("barry", "assets/barry.png");
   LoadTexture("bgHallway0", "assets/bgHallway0.png");
+  LoadTexture("bgLab0", "assets/bgLab0.png");
+  LoadTexture("bgGlassTube0", "assets/bgGlassTube0.png");
+  LoadTexture("bgStart", "assets/bgStart.png");
 }
 
 sf::Texture& AssetManager::GetTexture(const std::string& name) {

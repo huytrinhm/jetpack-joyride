@@ -57,13 +57,23 @@ int main() {
   // Initialize rooms
   std::vector<Room> rooms;
 
-  rooms.emplace_back("bgHallway0", sf::IntRect(0, 0, 3 * 128, 512),
+  rooms.emplace_back("bgStart", 128 * 4, sf::IntRect(0, 0, 4 * 128, 512),
+                     sf::IntRect(4 * 128, 0, 128, 512),
+                     std::vector<std::pair<sf::IntRect, float>>{});
+
+  rooms.emplace_back("bgHallway0", 128 * 20, sf::IntRect(0, 0, 3 * 128, 512),
                      sf::IntRect(3 * 128, 0, 128, 512),
                      std::vector<std::pair<sf::IntRect, float>>{
-                         {sf::IntRect(4 * 128, 0, 128, 512), 0.5f},
-                         {sf::IntRect(5 * 128, 0, 128, 512), 0.3f},
-                         {sf::IntRect(6 * 128, 0, 128, 512), 0.15f},
-                         {sf::IntRect(7 * 128, 0, 128, 512), 0.05f}});
+                         {sf::IntRect(4 * 128, 0, 128, 512), 0.4f},
+                         {sf::IntRect(5 * 128, 0, 128, 512), 0.4f},
+                         {sf::IntRect(6 * 128, 0, 128, 512), 0.1f},
+                         {sf::IntRect(7 * 128, 0, 128, 512), 0.1f}});
+
+  rooms.emplace_back("bgLab0", 128 * 20, sf::IntRect(0, 0, 128 * 2, 512),
+                     sf::IntRect(3 * 128, 0, 128, 512),
+                     std::vector<std::pair<sf::IntRect, float>>{
+                         {sf::IntRect(2 * 128, 0, 128, 512), 0.5f},
+                         {sf::IntRect(4 * 128, 0, 4 * 128, 512), 0.5f}});
 
   // Initialize background renderer
   auto backgroundRenderer =

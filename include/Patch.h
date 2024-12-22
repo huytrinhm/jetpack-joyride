@@ -6,8 +6,9 @@
 
 class Patch {
  public:
-  Patch(const sf::Texture& texture, const sf::IntRect& rect);
+  Patch(const sf::Texture& texture, const sf::IntRect& rect, size_t layerIndex);
   const sf::Sprite& getSprite() const;
+  size_t layerIndex;
 
  private:
   sf::Sprite sprite;
@@ -21,6 +22,7 @@ class ActivePatch {
   void Render(GameRenderer& renderer) const;
 
   sf::Sprite sprite;
+  size_t layerIndex;
 };
 
 #endif  // PATCH_H
