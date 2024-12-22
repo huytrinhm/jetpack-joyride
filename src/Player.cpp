@@ -43,6 +43,6 @@ void Player::Start() {
 
 void Player::Update() {}
 
-void Player::Render(sf::RenderTarget& target) {
-  GetComponent<Animator>()->Render(target);
+void Player::Render(GameRenderer& renderer) {
+  GetComponent<Animator>()->Render(renderer);
 }

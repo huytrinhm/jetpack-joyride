@@ -2,6 +2,7 @@
 #define PATCH_H
 
 #include <SFML/Graphics.hpp>
+#include "Engine/GameRenderer.h"
 
 class Patch {
  public:
@@ -17,7 +18,7 @@ class ActivePatch {
   ActivePatch(const Patch& patchTemplate, float x, float y);
   void move(float dx);
   bool isOffScreen(float screenWidth) const;
-  void Render(sf::RenderTarget& target) const;
+  void Render(GameRenderer& renderer) const;
 
   sf::Sprite sprite;
 };

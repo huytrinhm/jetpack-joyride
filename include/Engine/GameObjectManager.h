@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <memory>
 #include <vector>
+#include "Engine/GameRenderer.h"
 #include "GameObject.h"
 
 class GameObjectManager {
@@ -15,7 +16,7 @@ class GameObjectManager {
   void StartAll();
   void UpdateAll();
   void FixedUpdateAll();
-  void RenderAll(sf::RenderTarget& target);
+  void RenderAll(GameRenderer& renderer);
 };
 
 #endif  // GAMEOBJECTMANAGER_H

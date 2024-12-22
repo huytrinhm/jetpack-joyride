@@ -4,6 +4,7 @@
 #include <deque>
 #include <vector>
 #include "Engine/GameObject.h"
+#include "Engine/GameRenderer.h"
 #include "Patch.h"
 #include "Room.h"
 
@@ -14,7 +15,7 @@ class BackgroundRenderer : public GameObject {
                      float scrollSpeed);
   void Start() override;
   void Update() override;
-  void Render(sf::RenderTarget& target) override;
+  void Render(GameRenderer& renderer) override;
 
  private:
   std::deque<ActivePatch> activePatches;

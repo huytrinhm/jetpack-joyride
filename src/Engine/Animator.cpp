@@ -52,9 +52,9 @@ void Animator::Update() {
   sprite.setRotation(Component::gameObject->transform.rotation);
 }
 
-void Animator::Render(sf::RenderTarget& target) {
+void Animator::Render(GameRenderer& renderer) {
   if (currentAnimation.empty())
     return;
 
-  GameManager::Instance().renderTarget->draw(sprite);
+  renderer.AddDrawable(1, &sprite);
 }

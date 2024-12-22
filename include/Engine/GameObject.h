@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include "Component.h"
+#include "Engine/GameRenderer.h"
 #include "Transform.h"
 
 class GameObject {
@@ -31,7 +32,7 @@ class GameObject {
   virtual void Start();
   virtual void Update();
   virtual void FixedUpdate();
-  virtual void Render(sf::RenderTarget& target);
+  virtual void Render(GameRenderer& renderer);
 };
 
 #endif  // GAMEOBJECT_H

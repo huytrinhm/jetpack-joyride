@@ -10,6 +10,7 @@
 #include "Config.h"
 #include "Engine/GameManager.h"
 #include "Engine/GameObjectManager.h"
+#include "Engine/GameRenderer.h"
 #include "Player.h"
 #include "Room.h"
 
@@ -50,6 +51,8 @@ int main() {
   game.renderTarget = &renderTexture;
 
   GameObjectManager gameObjectManager;
+
+  GameRenderer gameRenderer(3);
 
   // Initialize rooms
   std::vector<Room> rooms;
@@ -103,7 +106,8 @@ int main() {
 
     // Render
     renderTexture.clear(sf::Color::Black);
-    gameObjectManager.RenderAll(renderTexture);
+    gameObjectManager.RenderAll(gameRenderer);
+    gameRenderer.Render(renderTexture);
     renderTexture.display();
 
     window.clear();

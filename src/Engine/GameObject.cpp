@@ -8,7 +8,7 @@ GameObject::GameObject(const std::string& name) : name(name) {
 void GameObject::Start() {}
 void GameObject::Update() {}
 void GameObject::FixedUpdate() {}
-void GameObject::Render(sf::RenderTarget& target) {}
+void GameObject::Render(GameRenderer& renderer) {}
 
 void GameObject::DoStart() {
   for (const auto& component : components) {

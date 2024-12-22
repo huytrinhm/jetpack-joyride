@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <vector>
 #include "Component.h"
+#include "Engine/GameRenderer.h"
 
 class Animation {
  public:
@@ -37,7 +38,7 @@ class Animator : public Component {
                            float frameTime);
   void PlayAnimation(const std::string& name);
   void Update() override;
-  void Render(sf::RenderTarget& target);
+  void Render(GameRenderer& renderer);
 
  private:
   sf::Sprite sprite;

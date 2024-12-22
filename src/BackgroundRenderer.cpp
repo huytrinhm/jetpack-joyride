@@ -61,8 +61,8 @@ void BackgroundRenderer::Update() {
   }
 }
 
-void BackgroundRenderer::Render(sf::RenderTarget& target) {
+void BackgroundRenderer::Render(GameRenderer& renderer) {
   for (const auto& patch : activePatches) {
-    patch.Render(target);
+    patch.Render(renderer);
   }
 }

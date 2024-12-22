@@ -22,8 +22,8 @@ void GameObjectManager::FixedUpdateAll() {
   }
 }
 
-void GameObjectManager::RenderAll(sf::RenderTarget& target) {
+void GameObjectManager::RenderAll(GameRenderer& renderer) {
   for (const auto& gameObject : gameObjects) {
-    gameObject->Render(target);
+    gameObject->Render(renderer);
   }
 }

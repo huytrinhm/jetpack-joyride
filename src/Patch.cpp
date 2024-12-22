@@ -22,6 +22,6 @@ bool ActivePatch::isOffScreen(float screenWidth) const {
   return sprite.getPosition().x + sprite.getGlobalBounds().width < 0;
 }
 
-void ActivePatch::Render(sf::RenderTarget& target) const {
-  target.draw(sprite);
+void ActivePatch::Render(GameRenderer& renderer) const {
+  renderer.AddDrawable(0, &sprite);
 }
