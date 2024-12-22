@@ -1,3 +1,4 @@
+#include <box2d/box2d.h>
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
@@ -13,6 +14,7 @@
 #include "Engine/GameRenderer.h"
 #include "Player.h"
 #include "Room.h"
+#include "b2DrawSFML.h"
 
 void updateLetterbox(sf::RenderWindow& window, sf::Sprite& renderSprite) {
   float windowWidth = static_cast<float>(window.getSize().x);
@@ -80,6 +82,21 @@ int main() {
       std::make_unique<BackgroundRenderer>("BackgroundRenderer", rooms, 200.0f);
   gameObjectManager.AddGameObject(std::move(backgroundRenderer));
 
+  // Initialize box2d
+  b2SetLengthUnitsPerMeter(20.f);
+  DebugDraw::debugDraw.context = &renderTexture;
+  b2WorldDef worldDef = b2DefaultWorldDef();
+  worldDef.gravity = (b2Vec2){0.0f, 250.f};
+  game.worldId = b2CreateWorld(&worldDef);
+
+  b2BodyDef groundBodyDef = b2DefaultBodyDef();
+  groundBodyDef.position = (b2Vec2){WORLD_WIDTH / 2.f, WORLD_HEIGHT - 22.f};
+  b2BodyId groundId = b2CreateBody(game.worldId, &groundBodyDef);
+
+  b2Polygon groundBox = b2MakeBox(WORLD_WIDTH / 2.f, 22.f);
+  b2ShapeDef groundShapeDef = b2DefaultShapeDef();
+  b2CreatePolygonShape(groundId, &groundShapeDef, &groundBox);
+
   auto player = std::make_unique<Player>();
   gameObjectManager.AddGameObject(std::move(player));
 
@@ -108,6 +125,7 @@ int main() {
     // std::cerr << "FPS: " << 1.0f / game.deltaTime << std::endl;
 
     while (accumulatedTime >= game.fixedDeltaTime) {
+      b2World_Step(game.worldId, game.fixedDeltaTime, 4);
       gameObjectManager.FixedUpdateAll();
       accumulatedTime -= game.fixedDeltaTime;
     }
@@ -118,12 +136,15 @@ int main() {
     renderTexture.clear(sf::Color::Black);
     gameObjectManager.RenderAll(gameRenderer);
     gameRenderer.Render(renderTexture);
+    b2World_Draw(game.worldId, &DebugDraw::debugDraw);
     renderTexture.display();
 
     window.clear();
     window.draw(renderSprite);
     window.display();
   }
+
+  b2DestroyWorld(game.worldId);
 
   return 0;
 }

@@ -1,44 +1,56 @@
 #include "Player.h"
 #include "AssetManager.h"
 #include "Engine/Animator.h"
+#include "Engine/PhysicBody.h"
 
 Player::Player(const std::string& name) : GameObject(name) {
   auto& texture = AssetManager::Instance().GetTexture("barry");
   auto animator = AddComponent<Animator>(texture);
+  Animation* animation = nullptr;
 
-  animator->AddAnimation("running");
+  animation = animator->AddAnimation("running");
   for (int i = 0; i < 4; i++)
-    animator->AddFrameToAnimation("running", i * 48, 0 * 72, 48, 72, 0.1f);
+    animation->frames.emplace_back(sf::IntRect{i * 48, 0 * 72, 48, 72}, 0.1f,
+                                   sf::Vector2f{-5, 13});
 
-  animator->AddAnimation("flying");
+  animation = animator->AddAnimation("flying");
   for (int i = 0; i < 4; i++)
-    animator->AddFrameToAnimation("flying", i * 48, 1 * 72, 48, 72, 0.1f);
+    animation->frames.emplace_back(sf::IntRect{i * 48, 1 * 72, 48, 72}, 0.1f,
+                                   sf::Vector2f{-5, 13});
 
-  animator->AddAnimation("falling");
+  animation = animator->AddAnimation("falling");
   for (int i = 0; i < 4; i++)
-    animator->AddFrameToAnimation("falling", i * 48, 2 * 72, 48, 72, 0.1f);
+    animation->frames.emplace_back(sf::IntRect{i * 48, 2 * 72, 48, 72}, 0.1f,
+                                   sf::Vector2f{-5, 13});
 
-  animator->AddAnimation("landing");
+  animation = animator->AddAnimation("landing");
   for (int i = 0; i < 4; i++)
-    animator->AddFrameToAnimation("landing", i * 48, 3 * 72, 48, 72, 0.1f);
+    animation->frames.emplace_back(sf::IntRect{i * 48, 3 * 72, 48, 72}, 0.1f,
+                                   sf::Vector2f{-5, 13});
 
-  animator->AddAnimation("dead");
+  animation = animator->AddAnimation("dead");
   for (int i = 0; i < 4; i++)
-    animator->AddFrameToAnimation("dead", i * 48, 4 * 72, 48, 72, 0.1f);
+    animation->frames.emplace_back(sf::IntRect{i * 48, 4 * 72, 48, 72}, 0.1f,
+                                   sf::Vector2f{-5, 13});
 
-  animator->AddAnimation("dead_falling");
+  animation = animator->AddAnimation("dead_falling");
   for (int i = 0; i < 4; i++)
-    animator->AddFrameToAnimation("dead_falling", i * 48, 6 * 72, 48, 72, 0.1f);
+    animation->frames.emplace_back(sf::IntRect{i * 48, 6 * 72, 48, 72}, 0.1f,
+                                   sf::Vector2f{-5, 13});
 
-  animator->AddAnimation("laying");
-  animator->AddFrameToAnimation("laying", 48, 7 * 72, 48, 72, 0.1f);
-  animator->AddFrameToAnimation("laying", 0, 7 * 72, 48, 72, 0.1f);
+  animation = animator->AddAnimation("laying");
+  animation->frames.emplace_back(sf::IntRect{48, 7 * 72, 48, 72}, 0.1f,
+                                 sf::Vector2f{-5, 13});
+  animation->frames.emplace_back(sf::IntRect{0, 7 * 72, 48, 72}, 0.1f,
+                                 sf::Vector2f{-5, 13});
 
-  animator->PlayAnimation("dead_falling");
+  animator->PlayAnimation("running");
+
+  AddComponent<PhysicBody>(b2Vec2{70, 50}, b2Vec2{18, 36});
 }
 
 void Player::Start() {
-  transform.position = sf::Vector2f(0, 0);
+  // transform.position = sf::Vector2f(50, 50);
 }
 
 void Player::Update() {}

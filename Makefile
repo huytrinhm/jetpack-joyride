@@ -1,6 +1,6 @@
 CXX = g++
-CXXFLAGS = -std=c++20 -Wall -Iinclude -Iexternal/SFML-2.6.2/include
-LDFLAGS = -Lexternal/SFML-2.6.2/lib -lsfml-graphics -lsfml-window -lsfml-system
+CXXFLAGS = -std=c++20 -Wall -Iinclude -Iexternal/SFML-2.6.2/include -Iexternal/box2d/include
+LDFLAGS = -Lexternal/SFML-2.6.2/lib -Lexternal/box2d/lib -lsfml-graphics -lsfml-window -lsfml-system -lbox2d
 
 SRCDIR = src
 BUILDDIR = build

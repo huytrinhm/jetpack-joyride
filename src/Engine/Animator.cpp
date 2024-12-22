@@ -4,24 +4,43 @@
 #include "Engine/GameManager.h"
 #include "Engine/GameObject.h"
 
+AnimationFrame::AnimationFrame(sf::IntRect frame,
+                               float frameTime,
+                               sf::Vector2f offset)
+    : frame(frame), frameTime(frameTime), offset(offset) {}
+
+sf::IntRect Animation::GetFrame(int index) {
+  return frames[index].frame;
+}
+
+sf::Vector2f Animation::GetOffset(int index) {
+  return frames[index].offset;
+}
+
+int Animation::GetFrameCount() {
+  return frames.size();
+}
+
+float Animation::GetFrameTime(int index) {
+  return frames[index].frameTime;
+}
+
 Animator::Animator(const sf::Texture& texture)
     : sprite(texture),
       currentAnimation(""),
       currentFrame(0),
       elapsedTime(0.0f) {}
 
-void Animator::AddAnimation(const std::string& name) {
+Animation* Animator::AddAnimation(const std::string& name) {
   animations[name] = Animation();
+  return &animations[name];
 }
 
-void Animator::AddFrameToAnimation(const std::string& name,
-                                   int x,
-                                   int y,
-                                   int width,
-                                   int height,
-                                   float frameTime) {
+Animation& Animator::GetAnimation(const std::string& name) {
   if (animations.find(name) != animations.end()) {
-    animations[name].AddFrame(sf::IntRect(x, y, width, height), frameTime);
+    return animations[name];
+  } else {
+    throw std::runtime_error("Animation not found: " + name);
   }
 }
 
@@ -38,16 +57,22 @@ void Animator::Update() {
   if (currentAnimation.empty())
     return;
 
+  float frameTime = animations[currentAnimation].GetFrameTime(currentFrame);
+
   elapsedTime += GameManager::Instance().deltaTime;
-  while (elapsedTime >=
-         animations[currentAnimation].GetFrameTime(currentFrame)) {
-    elapsedTime -= animations[currentAnimation].GetFrameTime(currentFrame);
+  while (elapsedTime >= frameTime) {
+    elapsedTime -= frameTime;
     currentFrame =
         (currentFrame + 1) % animations[currentAnimation].GetFrameCount();
-  }
-  sprite.setTextureRect(animations[currentAnimation].GetFrame(currentFrame));
 
-  sprite.setPosition(Component::gameObject->transform.position);
+    frameTime = animations[currentAnimation].GetFrameTime(currentFrame);
+  }
+  sf::IntRect frame = animations[currentAnimation].GetFrame(currentFrame);
+  sf::Vector2f offset = animations[currentAnimation].GetOffset(currentFrame);
+
+  sprite.setTextureRect(frame);
+  sprite.setPosition(Component::gameObject->transform.position + offset -
+                     sf::Vector2f{frame.width / 2.f, frame.height / 2.f});
   sprite.setScale(Component::gameObject->transform.scale);
   sprite.setRotation(Component::gameObject->transform.rotation);
 }

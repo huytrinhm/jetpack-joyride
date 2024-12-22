@@ -2,6 +2,7 @@
 #define GAMEMANAGER_H
 
 #include <SFML/Graphics.hpp>
+#include "box2d/box2d.h"
 
 class GameManager {
  public:
@@ -15,6 +16,7 @@ class GameManager {
   float timeScale = 1.0f;
   float fixedDeltaTime = 0.02f;
   sf::RenderTarget* renderTarget;
+  b2WorldId worldId;
 
  private:
   GameManager() : renderTarget(nullptr) {}

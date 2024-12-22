@@ -4,7 +4,8 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/external/SFML-2.6.2/include"
+                "${workspaceFolder}/external/SFML-2.6.2/include",
+                "${workspaceFolder}/external/box2d/include"
             ],
             "defines": [
                 "_DEBUG",
