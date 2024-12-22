@@ -14,6 +14,8 @@ class GameObjectManager {
   void AddGameObject(std::unique_ptr<GameObject> gameObject);
   void StartAll();
   void UpdateAll();
+  void FixedUpdateAll();
+  void RenderAll(sf::RenderTarget& target);
 };
 
 #endif  // GAMEOBJECTMANAGER_H

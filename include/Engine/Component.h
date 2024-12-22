@@ -9,6 +9,7 @@ class Component {
 
   virtual ~Component();
   virtual void Update();
+  virtual void FixedUpdate();
   virtual void Start();
 };
 

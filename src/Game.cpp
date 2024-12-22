@@ -6,10 +6,12 @@
 #include <iostream>
 #include <vector>
 #include "AssetManager.h"
+#include "BackgroundRenderer.h"
 #include "Config.h"
 #include "Engine/GameManager.h"
 #include "Engine/GameObjectManager.h"
 #include "Player.h"
+#include "Room.h"
 
 void updateLetterbox(sf::RenderWindow& window, sf::Sprite& renderSprite) {
   float windowWidth = static_cast<float>(window.getSize().x);
@@ -32,6 +34,7 @@ int main() {
   // Create window in fullscreen mode
   sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "Jetpack Joyride",
                           sf::Style::Fullscreen);
+  window.setVerticalSyncEnabled(true);
   window.setFramerateLimit(60);
 
   // Create render texture
@@ -47,6 +50,23 @@ int main() {
   game.renderTarget = &renderTexture;
 
   GameObjectManager gameObjectManager;
+
+  // Initialize rooms
+  std::vector<Room> rooms;
+
+  rooms.emplace_back("bgHallway0", sf::IntRect(0, 0, 3 * 128, 512),
+                     sf::IntRect(3 * 128, 0, 128, 512),
+                     std::vector<std::pair<sf::IntRect, float>>{
+                         {sf::IntRect(4 * 128, 0, 128, 512), 0.5f},
+                         {sf::IntRect(5 * 128, 0, 128, 512), 0.3f},
+                         {sf::IntRect(6 * 128, 0, 128, 512), 0.15f},
+                         {sf::IntRect(7 * 128, 0, 128, 512), 0.05f}});
+
+  // Initialize background renderer
+  auto backgroundRenderer =
+      std::make_unique<BackgroundRenderer>("BackgroundRenderer", rooms, 200.0f);
+  gameObjectManager.AddGameObject(std::move(backgroundRenderer));
+
   auto player = std::make_unique<Player>();
   gameObjectManager.AddGameObject(std::move(player));
 
@@ -54,6 +74,7 @@ int main() {
 
   // Main game loop
   sf::Clock clock;
+  float accumulatedTime = 0.0f;
 
   while (window.isOpen()) {
     // Event handling
@@ -67,10 +88,22 @@ int main() {
     }
 
     // Update
-    game.deltaTime = clock.restart().asSeconds();
+    game.unscaledDeltaTime = clock.restart().asSeconds();
+    game.deltaTime = game.unscaledDeltaTime * game.timeScale;
+    accumulatedTime += game.deltaTime;
 
-    renderTexture.clear(sf::Color::Black);
+    // std::cerr << "FPS: " << 1.0f / game.deltaTime << std::endl;
+
+    while (accumulatedTime >= game.fixedDeltaTime) {
+      gameObjectManager.FixedUpdateAll();
+      accumulatedTime -= game.fixedDeltaTime;
+    }
+
     gameObjectManager.UpdateAll();
+
+    // Render
+    renderTexture.clear(sf::Color::Black);
+    gameObjectManager.RenderAll(renderTexture);
     renderTexture.display();
 
     window.clear();

@@ -2,10 +2,6 @@
 
 Component::~Component() = default;
 
-void Component::Update() {
-  // Implementation of Update method
-}
-
-void Component::Start() {
-  // Implementation of Start method
-}
+void Component::Start() {}
+void Component::Update() {}
+void Component::FixedUpdate() {}

@@ -15,3 +15,15 @@ void GameObjectManager::UpdateAll() {
     gameObject->DoUpdate();
   }
 }
+
+void GameObjectManager::FixedUpdateAll() {
+  for (auto& gameObject : gameObjects) {
+    gameObject->DoFixedUpdate();
+  }
+}
+
+void GameObjectManager::RenderAll(sf::RenderTarget& target) {
+  for (const auto& gameObject : gameObjects) {
+    gameObject->Render(target);
+  }
+}

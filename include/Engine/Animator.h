@@ -36,8 +36,8 @@ class Animator : public Component {
                            int height,
                            float frameTime);
   void PlayAnimation(const std::string& name);
-  void Start() override;
   void Update() override;
+  void Render(sf::RenderTarget& target);
 
  private:
   sf::Sprite sprite;

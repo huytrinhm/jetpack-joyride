@@ -11,6 +11,9 @@ class GameManager {
   }
 
   float deltaTime;
+  float unscaledDeltaTime;
+  float timeScale = 1.0f;
+  float fixedDeltaTime = 0.02f;
   sf::RenderTarget* renderTarget;
 
  private:

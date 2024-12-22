@@ -10,8 +10,7 @@ class Player : public GameObject {
 
   void Start() override;
   void Update() override;
-
-  sf::Texture texture;
+  void Render(sf::RenderTarget& target) override;
 };
 
 #endif  // PLAYER_H

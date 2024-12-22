@@ -7,6 +7,8 @@ GameObject::GameObject(const std::string& name) : name(name) {
 
 void GameObject::Start() {}
 void GameObject::Update() {}
+void GameObject::FixedUpdate() {}
+void GameObject::Render(sf::RenderTarget& target) {}
 
 void GameObject::DoStart() {
   for (const auto& component : components) {
@@ -22,6 +24,14 @@ void GameObject::DoUpdate() {
   }
 
   Update();
+}
+
+void GameObject::DoFixedUpdate() {
+  for (const auto& component : components) {
+    component->FixedUpdate();
+  }
+
+  FixedUpdate();
 }
 
 template <typename T, typename... Args>

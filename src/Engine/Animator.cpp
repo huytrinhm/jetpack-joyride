@@ -34,23 +34,27 @@ void Animator::PlayAnimation(const std::string& name) {
   }
 }
 
-void Animator::Start() {
-  // Initialization code if needed
-}
-
 void Animator::Update() {
   if (currentAnimation.empty())
     return;
 
   elapsedTime += GameManager::Instance().deltaTime;
-  if (elapsedTime >= animations[currentAnimation].GetFrameTime(currentFrame)) {
-    elapsedTime = 0.0f;
+  while (elapsedTime >=
+         animations[currentAnimation].GetFrameTime(currentFrame)) {
+    elapsedTime -= animations[currentAnimation].GetFrameTime(currentFrame);
     currentFrame =
         (currentFrame + 1) % animations[currentAnimation].GetFrameCount();
-    sprite.setTextureRect(animations[currentAnimation].GetFrame(currentFrame));
   }
+  sprite.setTextureRect(animations[currentAnimation].GetFrame(currentFrame));
+
   sprite.setPosition(Component::gameObject->transform.position);
   sprite.setScale(Component::gameObject->transform.scale);
   sprite.setRotation(Component::gameObject->transform.rotation);
+}
+
+void Animator::Render(sf::RenderTarget& target) {
+  if (currentAnimation.empty())
+    return;
+
   GameManager::Instance().renderTarget->draw(sprite);
 }

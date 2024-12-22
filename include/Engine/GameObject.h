@@ -1,6 +1,7 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 
+#include <SFML/Graphics.hpp>
 #include <memory>
 #include <string>
 #include <vector>
@@ -25,9 +26,12 @@ class GameObject {
 
   void DoStart();
   void DoUpdate();
+  void DoFixedUpdate();
 
   virtual void Start();
   virtual void Update();
+  virtual void FixedUpdate();
+  virtual void Render(sf::RenderTarget& target);
 };
 
 #endif  // GAMEOBJECT_H
