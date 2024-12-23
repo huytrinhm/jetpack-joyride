@@ -83,17 +83,18 @@ int main() {
   gameObjectManager.AddGameObject(std::move(backgroundRenderer));
 
   // Initialize box2d
-  b2SetLengthUnitsPerMeter(20.f);
   DebugDraw::debugDraw.context = &renderTexture;
   b2WorldDef worldDef = b2DefaultWorldDef();
-  worldDef.gravity = (b2Vec2){0.0f, 250.f};
+  worldDef.gravity = (b2Vec2){0.0f, 9.8f};
   game.worldId = b2CreateWorld(&worldDef);
 
   b2BodyDef groundBodyDef = b2DefaultBodyDef();
-  groundBodyDef.position = (b2Vec2){WORLD_WIDTH / 2.f, WORLD_HEIGHT - 22.f};
+  groundBodyDef.position =
+      pixelToMeter({WORLD_WIDTH / 2.f, WORLD_HEIGHT - 22.f});
   b2BodyId groundId = b2CreateBody(game.worldId, &groundBodyDef);
 
-  b2Polygon groundBox = b2MakeBox(WORLD_WIDTH / 2.f, 22.f);
+  b2Polygon groundBox =
+      b2MakeBox(pixelToMeter(WORLD_WIDTH / 2.f), pixelToMeter(22.f));
   b2ShapeDef groundShapeDef = b2DefaultShapeDef();
   b2CreatePolygonShape(groundId, &groundShapeDef, &groundBox);
 

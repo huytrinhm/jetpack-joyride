@@ -2,6 +2,7 @@
 #include "AssetManager.h"
 #include "Engine/Animator.h"
 #include "Engine/PhysicBody.h"
+#include "Utilities.h"
 
 Player::Player(const std::string& name) : GameObject(name) {
   auto& texture = AssetManager::Instance().GetTexture("barry");
@@ -46,7 +47,7 @@ Player::Player(const std::string& name) : GameObject(name) {
 
   animator->PlayAnimation("running");
 
-  AddComponent<PhysicBody>(b2Vec2{70, 50}, b2Vec2{18, 36});
+  AddComponent<PhysicBody>(pixelToMeter({70, 50}), pixelToMeter({18, 36}));
 }
 
 void Player::Start() {
