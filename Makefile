@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -std=c++20 -Wall -Iinclude -Iexternal/SFML-2.6.2/include -Iexternal/box2d/include
+CXXFLAGS = -std=c++20 -Wall -Iinclude -Iexternal/SFML-2.6.2/include -Iexternal/box2d/include -MMD -MP
 LDFLAGS = -Lexternal/SFML-2.6.2/lib -Lexternal/box2d/lib -lsfml-graphics -lsfml-window -lsfml-system -lbox2d
 
 SRCDIR = src
@@ -8,6 +8,7 @@ TARGET = build/game
 
 SOURCES = $(shell find $(SRCDIR) -name '*.cpp')
 OBJECTS = $(patsubst $(SRCDIR)/%.cpp, $(BUILDDIR)/%.o, $(SOURCES))
+DEPS = $(OBJECTS:.o=.d)
 
 all: $(TARGET) copy-sfml-binaries copy-assets
 
@@ -28,5 +29,7 @@ copy-assets:
 
 clean:
 	rm -rf $(BUILDDIR) $(TARGET)
+
+-include $(DEPS)
 
 .PHONY: all clean copy-sfml-binaries copy-assets
