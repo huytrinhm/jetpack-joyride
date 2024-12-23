@@ -77,7 +77,6 @@ int main() {
                          {sf::IntRect(2 * 128, 0, 128, 512), 0.5f},
                          {sf::IntRect(4 * 128, 0, 4 * 128, 512), 0.5f}});
 
-  // Initialize background renderer
   auto backgroundRenderer =
       std::make_unique<BackgroundRenderer>("BackgroundRenderer", rooms, 200.0f);
   gameObjectManager.AddGameObject(std::move(backgroundRenderer));
@@ -98,7 +97,11 @@ int main() {
   b2ShapeDef groundShapeDef = b2DefaultShapeDef();
   b2CreatePolygonShape(groundId, &groundShapeDef, &groundBox);
 
-  auto player = std::make_unique<Player>();
+  // Initialize player
+  std::vector<std::shared_ptr<Vehicle>> vehicles;
+  vehicles.push_back(std::make_shared<Jetpack>());
+
+  auto player = std::make_unique<Player>("Player", vehicles[0].get());
   gameObjectManager.AddGameObject(std::move(player));
 
   gameObjectManager.StartAll();
@@ -119,6 +122,8 @@ int main() {
     }
 
     // Update
+    InputManager::Instance().Update(window);
+
     game.unscaledDeltaTime = clock.restart().asSeconds();
     game.deltaTime = game.unscaledDeltaTime * game.timeScale;
     accumulatedTime += game.deltaTime;

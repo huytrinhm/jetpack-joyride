@@ -30,8 +30,10 @@ class Animation {
 
 class Animator : public Component {
  public:
+  Animator() = default;
   Animator(const sf::Texture& texture);
 
+  void SetTexture(const sf::Texture& texture);
   Animation* AddAnimation(const std::string& name);
   Animation& GetAnimation(const std::string& name);
   void PlayAnimation(const std::string& name);

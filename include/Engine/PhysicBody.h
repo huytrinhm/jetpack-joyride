@@ -8,6 +8,7 @@ class PhysicBody : public Component {
  public:
   PhysicBody(b2Vec2 position, b2Vec2 scale);
   void FixedUpdate() override;
+  ~PhysicBody();
 
  private:
   b2BodyId bodyId;

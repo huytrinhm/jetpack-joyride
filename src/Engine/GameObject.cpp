@@ -56,15 +56,28 @@ T* GameObject::GetComponent() {
   return nullptr;
 }
 
+template <typename T>
+void GameObject::RemoveComponent() {
+  for (auto it = components.begin(); it != components.end(); ++it) {
+    if (dynamic_cast<T*>((*it).get())) {
+      components.erase(it);
+      return;
+    }
+  }
+}
+
 // Explicit template instantiations
 template Transform* GameObject::AddComponent<Transform>();
 template Transform* GameObject::GetComponent<Transform>();
+template void GameObject::RemoveComponent<Transform>();
 
 template Animator* GameObject::AddComponent<Animator, sf::Texture&>(
     sf::Texture&);
 template Animator* GameObject::GetComponent<Animator>();
+template void GameObject::RemoveComponent<Animator>();
 
 template PhysicBody* GameObject::AddComponent<PhysicBody, b2Vec2, b2Vec2>(
     b2Vec2&&,
     b2Vec2&&);
 template PhysicBody* GameObject::GetComponent<PhysicBody>();
+template void GameObject::RemoveComponent<PhysicBody>();

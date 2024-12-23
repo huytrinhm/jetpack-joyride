@@ -24,3 +24,7 @@ void PhysicBody::FixedUpdate() {
   //   std::cerr << "Position: " << position.x << ", " << position.y <<
   //   std::endl;
 }
+
+PhysicBody::~PhysicBody() {
+  b2DestroyBody(bodyId);
+}

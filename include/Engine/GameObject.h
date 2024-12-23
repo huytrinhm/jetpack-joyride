@@ -25,6 +25,9 @@ class GameObject {
   template <typename T>
   T* GetComponent();
 
+  template <typename T>
+  void RemoveComponent();
+
   void DoStart();
   void DoUpdate();
   void DoFixedUpdate();

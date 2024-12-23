@@ -31,6 +31,10 @@ Animator::Animator(const sf::Texture& texture)
       currentFrame(0),
       elapsedTime(0.0f) {}
 
+void Animator::SetTexture(const sf::Texture& texture) {
+  sprite.setTexture(texture);
+}
+
 Animation* Animator::AddAnimation(const std::string& name) {
   animations[name] = Animation();
   return &animations[name];
