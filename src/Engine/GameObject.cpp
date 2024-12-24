@@ -20,19 +20,19 @@ void GameObject::DoStart() {
 }
 
 void GameObject::DoUpdate() {
+  Update();
+
   for (const auto& component : components) {
     component->Update();
   }
-
-  Update();
 }
 
 void GameObject::DoFixedUpdate() {
+  FixedUpdate();
+
   for (const auto& component : components) {
     component->FixedUpdate();
   }
-
-  FixedUpdate();
 }
 
 template <typename T, typename... Args>
@@ -76,8 +76,6 @@ template Animator* GameObject::AddComponent<Animator, sf::Texture&>(
 template Animator* GameObject::GetComponent<Animator>();
 template void GameObject::RemoveComponent<Animator>();
 
-template PhysicBody* GameObject::AddComponent<PhysicBody, b2Vec2, b2Vec2>(
-    b2Vec2&&,
-    b2Vec2&&);
+template PhysicBody* GameObject::AddComponent<PhysicBody, b2BodyId>(b2BodyId&&);
 template PhysicBody* GameObject::GetComponent<PhysicBody>();
 template void GameObject::RemoveComponent<PhysicBody>();

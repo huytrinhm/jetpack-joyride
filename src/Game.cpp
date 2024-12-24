@@ -12,6 +12,7 @@
 #include "Engine/GameManager.h"
 #include "Engine/GameObjectManager.h"
 #include "Engine/GameRenderer.h"
+#include "Engine/InputManager.h"
 #include "Player.h"
 #include "Room.h"
 #include "b2DrawSFML.h"
@@ -84,18 +85,24 @@ int main() {
   // Initialize box2d
   DebugDraw::debugDraw.context = &renderTexture;
   b2WorldDef worldDef = b2DefaultWorldDef();
-  worldDef.gravity = (b2Vec2){0.0f, 9.8f};
+  worldDef.gravity = (b2Vec2){0.0f, 10.0f};
   game.worldId = b2CreateWorld(&worldDef);
 
-  b2BodyDef groundBodyDef = b2DefaultBodyDef();
-  groundBodyDef.position =
-      pixelToMeter({WORLD_WIDTH / 2.f, WORLD_HEIGHT - 22.f});
-  b2BodyId groundId = b2CreateBody(game.worldId, &groundBodyDef);
+  b2BodyDef bodyDef = b2DefaultBodyDef();
+  bodyDef.position = pixelToMeter({WORLD_WIDTH / 2.f, WORLD_HEIGHT - 44.f});
+  b2BodyId groundId = b2CreateBody(game.worldId, &bodyDef);
 
-  b2Polygon groundBox =
-      b2MakeBox(pixelToMeter(WORLD_WIDTH / 2.f), pixelToMeter(22.f));
-  b2ShapeDef groundShapeDef = b2DefaultShapeDef();
-  b2CreatePolygonShape(groundId, &groundShapeDef, &groundBox);
+  b2ShapeDef shapeDef = b2DefaultShapeDef();
+  shapeDef.friction = 0.0f;
+  b2Segment segment = {{-WORLD_WIDTH / 2.f, 0}, {WORLD_WIDTH / 2.f, 0}};
+  b2CreateSegmentShape(groundId, &shapeDef, &segment);
+
+  bodyDef.position = pixelToMeter({WORLD_WIDTH / 2.f, 44.f});
+  b2BodyId ceilingId = b2CreateBody(game.worldId, &bodyDef);
+  b2CreateSegmentShape(ceilingId, &shapeDef, &segment);
+
+  bodyDef.position = pixelToMeter({150, 0});
+  game.playerPivotId = b2CreateBody(game.worldId, &bodyDef);
 
   // Initialize player
   std::vector<std::shared_ptr<Vehicle>> vehicles;
@@ -131,8 +138,8 @@ int main() {
     // std::cerr << "FPS: " << 1.0f / game.deltaTime << std::endl;
 
     while (accumulatedTime >= game.fixedDeltaTime) {
-      b2World_Step(game.worldId, game.fixedDeltaTime, 4);
       gameObjectManager.FixedUpdateAll();
+      b2World_Step(game.worldId, game.fixedDeltaTime, 4);
       accumulatedTime -= game.fixedDeltaTime;
     }
 
@@ -142,7 +149,7 @@ int main() {
     renderTexture.clear(sf::Color::Black);
     gameObjectManager.RenderAll(gameRenderer);
     gameRenderer.Render(renderTexture);
-    b2World_Draw(game.worldId, &DebugDraw::debugDraw);
+    // b2World_Draw(game.worldId, &DebugDraw::debugDraw);
     renderTexture.display();
 
     window.clear();

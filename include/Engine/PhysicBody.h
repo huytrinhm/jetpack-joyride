@@ -6,12 +6,14 @@
 
 class PhysicBody : public Component {
  public:
-  PhysicBody(b2Vec2 position, b2Vec2 scale);
+  PhysicBody(b2BodyId bodyId);
   void FixedUpdate() override;
+  void ApplyForce(b2Vec2 force);
   ~PhysicBody();
 
  private:
   b2BodyId bodyId;
+  b2Vec2 totalForce;
 };
 
 #endif  // PHYSICBODY_H

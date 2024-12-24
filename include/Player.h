@@ -12,6 +12,7 @@ class Player : public GameObject {
 
   void Start() override;
   void Update() override;
+  void FixedUpdate() override;
   void Render(GameRenderer& renderer) override;
   void Equip(Vehicle* vehicle);
 

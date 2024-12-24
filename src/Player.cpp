@@ -17,6 +17,10 @@ void Player::Update() {
   vehicle->Update();
 }
 
+void Player::FixedUpdate() {
+  vehicle->FixedUpdate();
+}
+
 void Player::Render(GameRenderer& renderer) {
   vehicle->Render(renderer);
 }

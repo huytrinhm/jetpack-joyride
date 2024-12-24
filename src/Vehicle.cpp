@@ -1,9 +1,46 @@
 #include "Vehicle.h"
+#include <SFML/Graphics.hpp>
 #include "AssetManager.h"
+#include "Engine/GameManager.h"
+#include "Engine/InputManager.h"
 #include "Engine/PhysicBody.h"
 #include "Player.h"
 #include "Utilities.h"
 #include "box2d/box2d.h"
+
+b2BodyId createJetpackBody(sf::Vector2f position) {
+  const b2Vec2 scale = pixelToMeter({18, 36});
+
+  b2BodyDef bodyDef = b2DefaultBodyDef();
+  bodyDef.type = b2_dynamicBody;
+  bodyDef.position = pixelToMeter(position);
+  bodyDef.linearDamping = 0.0f;
+  bodyDef.fixedRotation = true;
+  bodyDef.gravityScale = 2.0f;
+  b2BodyId bodyId = b2CreateBody(GameManager::Instance().worldId, &bodyDef);
+
+  b2ShapeDef shapeDef = b2DefaultShapeDef();
+  shapeDef.friction = 0.0f;
+  shapeDef.restitution = 0.0f;
+
+  float radius = scale.x / 2;
+  float centerOffset = scale.y / 2 - radius;
+  b2Capsule capsule = {{0, -centerOffset}, {0, centerOffset}, radius};
+  b2CreateCapsuleShape(bodyId, &shapeDef, &capsule);
+
+  b2MassData massData = b2Body_GetMassData(bodyId);
+  massData.mass = 1;
+  b2Body_SetMassData(bodyId, massData);
+
+  b2PrismaticJointDef jointDef = b2DefaultPrismaticJointDef();
+  jointDef.bodyIdA = GameManager::Instance().playerPivotId;
+  jointDef.bodyIdB = bodyId;
+  jointDef.localAxisA = {0, 1};
+
+  b2CreatePrismaticJoint(GameManager::Instance().worldId, &jointDef);
+
+  return bodyId;
+}
 
 Vehicle::Vehicle(bool isDestroyable) : isDestroyable(isDestroyable) {}
 
@@ -51,13 +88,26 @@ Jetpack::Jetpack() {
 void Jetpack::Attach(Player* player) {
   this->player = player;
   animator.gameObject = (GameObject*)player;
-  player->AddComponent<PhysicBody>(pixelToMeter(player->transform.position),
-                                   pixelToMeter({18, 36}));
+  player->AddComponent<PhysicBody>(
+      createJetpackBody(player->transform.position));
   animator.PlayAnimation("running");
+  isThrusting = false;
 }
 
 void Jetpack::Update() {
+  if (InputManager::Instance().IsKeyDown(sf::Keyboard::Space)) {
+    isThrusting = true;
+  } else {
+    isThrusting = false;
+  }
+
   animator.Update();
+}
+
+void Jetpack::FixedUpdate() {
+  if (isThrusting) {
+    player->GetComponent<PhysicBody>()->ApplyForce({0, -thrustForce});
+  }
 }
 
 void Jetpack::Render(GameRenderer& renderer) {
