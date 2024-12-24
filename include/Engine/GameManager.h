@@ -12,6 +12,7 @@ class GameManager {
     return instance;
   }
 
+  float currentTime;
   float deltaTime;
   float unscaledDeltaTime;
   float timeScale = 1.0f;

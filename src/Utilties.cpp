@@ -18,3 +18,12 @@ b2Vec2 pixelToMeter(sf::Vector2f pixel) {
 sf::Vector2f meterToPixel(b2Vec2 meter) {
   return sf::Vector2f{meterToPixel(meter.x), meterToPixel(meter.y)};
 }
+
+int randomIntInRange(int min, int max) {
+  return min + rand() % ((max + 1) - min);
+}
+
+float randomFloatInRange(float min, float max) {
+  return min + static_cast<float>(rand()) /
+                   (static_cast<float>(RAND_MAX / (max - min)));
+}

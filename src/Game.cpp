@@ -55,7 +55,7 @@ int main() {
 
   GameObjectManager gameObjectManager;
 
-  GameRenderer gameRenderer(3);
+  GameRenderer gameRenderer(4);
 
   // Initialize rooms
   std::vector<Room> rooms;

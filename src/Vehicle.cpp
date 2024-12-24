@@ -1,6 +1,7 @@
 #include "Vehicle.h"
 #include <SFML/Graphics.hpp>
 #include "AssetManager.h"
+#include "Config.h"
 #include "Engine/GameManager.h"
 #include "Engine/InputManager.h"
 #include "Engine/PhysicBody.h"
@@ -44,7 +45,79 @@ b2BodyId createJetpackBody(sf::Vector2f position) {
 
 Vehicle::Vehicle(bool isDestroyable) : isDestroyable(isDestroyable) {}
 
-Jetpack::Jetpack() {
+JetpackBullet::JetpackBullet() {
+  sprite.setTexture(AssetManager::Instance().GetTexture("bullet"));
+  sprite.setOrigin(sprite.getLocalBounds().width / 2,
+                   sprite.getLocalBounds().height / 2);
+}
+
+void JetpackBullet::Update() {
+  if (!isActive)
+    return;
+
+  sprite.move(speed * cos(sprite.getRotation() * B2_PI / 180.0f),
+              speed * sin(sprite.getRotation() * B2_PI / 180.0f));
+  if (sprite.getPosition().y >= WORLD_HEIGHT - 40 + randomFloatInRange(-7, 5)) {
+    isActive = false;
+  }
+}
+
+void JetpackBullet::Render(GameRenderer& renderer) {
+  if (!isActive)
+    return;
+  renderer.AddDrawable(3, &sprite);
+}
+
+void JetpackBullet::Activate(const sf::Vector2f& position, float angle) {
+  sprite.setPosition(position);
+  sprite.setRotation(angle);
+  isActive = true;
+}
+
+bool JetpackBullet::IsActive() const {
+  return isActive;
+}
+
+JetpackBulletPool::JetpackBulletPool(size_t poolSize) {
+  pool.resize(poolSize);
+  for (size_t i = 0; i < poolSize; ++i) {
+    pool[i] = new JetpackBullet();
+  }
+}
+
+JetpackBulletPool::~JetpackBulletPool() {
+  for (auto bullet : pool) {
+    delete bullet;
+  }
+}
+
+JetpackBullet* JetpackBulletPool::CreateBullet(const sf::Vector2f& position,
+                                               float angle) {
+  if (nextFreeIndex >= pool.size())
+    return nullptr;
+
+  JetpackBullet* bullet = pool[nextFreeIndex++];
+  bullet->Activate(position, angle);
+  return bullet;
+}
+
+void JetpackBulletPool::UpdateAll() {
+  for (size_t i = 0; i < nextFreeIndex; ++i) {
+    if (!pool[i]->IsActive()) {
+      std::swap(pool[i], pool[--nextFreeIndex]);
+      continue;
+    }
+    pool[i]->Update();
+  }
+}
+
+void JetpackBulletPool::RenderAll(GameRenderer& renderer) {
+  for (auto bullet : pool) {
+    bullet->Render(renderer);
+  }
+}
+
+Jetpack::Jetpack() : bulletPool(30) {
   animator.SetTexture(AssetManager::Instance().GetTexture("barry"));
   Animation* animation = nullptr;
 
@@ -83,6 +156,8 @@ Jetpack::Jetpack() {
                                  sf::Vector2f{-5, 13});
   animation->frames.emplace_back(sf::IntRect{0, 7 * 72, 48, 72}, 0.1f,
                                  sf::Vector2f{-5, 13});
+
+  fireCounter = 0;
 }
 
 void Jetpack::Attach(Player* player) {
@@ -92,6 +167,8 @@ void Jetpack::Attach(Player* player) {
   player->AddComponent<PhysicBody>(bodyId);
   animator.PlayAnimation("running");
   isThrusting = false;
+  lastFireTime = 0;
+  fireCounter = 0;
 }
 
 void Jetpack::Update() {
@@ -123,6 +200,20 @@ void Jetpack::Update() {
     }
   }
 
+  if (isThrusting) {
+    fireCounter += GameManager::Instance().deltaTime;
+    if (fireCounter >= fireRate) {
+      float angle = 90 + randomFloatInRange(-8, 8);
+      bulletPool.CreateBullet(player->transform.position +
+                                  sf::Vector2f{-10 + -(angle - 90) * 0.8f, 32},
+                              angle);
+      fireCounter = 0;
+    }
+  } else {
+    fireCounter = 0;
+  }
+
+  bulletPool.UpdateAll();
   animator.Update();
 }
 
@@ -134,6 +225,7 @@ void Jetpack::FixedUpdate() {
 
 void Jetpack::Render(GameRenderer& renderer) {
   animator.Render(renderer);
+  bulletPool.RenderAll(renderer);
 }
 
 void Jetpack::Destroy() {}

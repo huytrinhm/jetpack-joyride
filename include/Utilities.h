@@ -9,4 +9,7 @@ float meterToPixel(float meter);
 b2Vec2 pixelToMeter(sf::Vector2f pixel);
 sf::Vector2f meterToPixel(b2Vec2 meter);
 
+int randomIntInRange(int min, int max);
+float randomFloatInRange(float min, float max);
+
 #endif  // UTILITIES_H
