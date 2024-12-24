@@ -26,6 +26,7 @@ class Animation {
   float GetFrameTime(int index);
 
   std::vector<AnimationFrame> frames;
+  bool isLoop;
 };
 
 class Animator : public Component {
@@ -34,9 +35,11 @@ class Animator : public Component {
   Animator(const sf::Texture& texture);
 
   void SetTexture(const sf::Texture& texture);
-  Animation* AddAnimation(const std::string& name);
+  Animation* AddAnimation(const std::string& name, bool isLoop = true);
   Animation& GetAnimation(const std::string& name);
   void PlayAnimation(const std::string& name);
+  void PlayAnimationWithTransition(const std::string& newAnimation,
+                                   const std::string& transition);
   void Update() override;
   void Render(GameRenderer& renderer);
 
@@ -46,6 +49,8 @@ class Animator : public Component {
   std::string currentAnimation;
   int currentFrame;
   float elapsedTime;
+  bool inTransition = false;
+  std::string targetAnimation;
 };
 
 #endif  // ANIMATOR_H

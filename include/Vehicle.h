@@ -3,6 +3,7 @@
 
 #include "Engine/Animator.h"
 #include "Engine/GameRenderer.h"
+#include "box2d/box2d.h"
 
 class Player;
 
@@ -20,6 +21,7 @@ class Vehicle {
  protected:
   Animator animator;
   Player* player;
+  b2BodyId bodyId;
 };
 
 class Jetpack : public Vehicle {
@@ -34,6 +36,7 @@ class Jetpack : public Vehicle {
  private:
   bool isThrusting;
   float thrustForce = 40.f;
+  bool onGround;
 };
 
 #endif  // VEHICLE_H

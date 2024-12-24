@@ -90,12 +90,12 @@ int main() {
 
   b2BodyDef bodyDef = b2DefaultBodyDef();
   bodyDef.position = pixelToMeter({WORLD_WIDTH / 2.f, WORLD_HEIGHT - 44.f});
-  b2BodyId groundId = b2CreateBody(game.worldId, &bodyDef);
+  game.groundId = b2CreateBody(game.worldId, &bodyDef);
 
   b2ShapeDef shapeDef = b2DefaultShapeDef();
   shapeDef.friction = 0.0f;
   b2Segment segment = {{-WORLD_WIDTH / 2.f, 0}, {WORLD_WIDTH / 2.f, 0}};
-  b2CreateSegmentShape(groundId, &shapeDef, &segment);
+  b2CreateSegmentShape(game.groundId, &shapeDef, &segment);
 
   bodyDef.position = pixelToMeter({WORLD_WIDTH / 2.f, 44.f});
   b2BodyId ceilingId = b2CreateBody(game.worldId, &bodyDef);
@@ -138,8 +138,8 @@ int main() {
     // std::cerr << "FPS: " << 1.0f / game.deltaTime << std::endl;
 
     while (accumulatedTime >= game.fixedDeltaTime) {
-      gameObjectManager.FixedUpdateAll();
       b2World_Step(game.worldId, game.fixedDeltaTime, 4);
+      gameObjectManager.FixedUpdateAll();
       accumulatedTime -= game.fixedDeltaTime;
     }
 

@@ -58,17 +58,17 @@ Jetpack::Jetpack() {
     animation->frames.emplace_back(sf::IntRect{i * 48, 1 * 72, 48, 72}, 0.1f,
                                    sf::Vector2f{-5, 13});
 
-  animation = animator.AddAnimation("falling");
+  animation = animator.AddAnimation("falling", false);
   for (int i = 0; i < 4; i++)
     animation->frames.emplace_back(sf::IntRect{i * 48, 2 * 72, 48, 72}, 0.1f,
                                    sf::Vector2f{-5, 13});
 
-  animation = animator.AddAnimation("landing");
+  animation = animator.AddAnimation("landing", false);
   for (int i = 0; i < 4; i++)
     animation->frames.emplace_back(sf::IntRect{i * 48, 3 * 72, 48, 72}, 0.1f,
                                    sf::Vector2f{-5, 13});
 
-  animation = animator.AddAnimation("dead");
+  animation = animator.AddAnimation("dead", false);
   for (int i = 0; i < 4; i++)
     animation->frames.emplace_back(sf::IntRect{i * 48, 4 * 72, 48, 72}, 0.1f,
                                    sf::Vector2f{-5, 13});
@@ -78,7 +78,7 @@ Jetpack::Jetpack() {
     animation->frames.emplace_back(sf::IntRect{i * 48, 6 * 72, 48, 72}, 0.1f,
                                    sf::Vector2f{-5, 13});
 
-  animation = animator.AddAnimation("laying");
+  animation = animator.AddAnimation("laying", false);
   animation->frames.emplace_back(sf::IntRect{48, 7 * 72, 48, 72}, 0.1f,
                                  sf::Vector2f{-5, 13});
   animation->frames.emplace_back(sf::IntRect{0, 7 * 72, 48, 72}, 0.1f,
@@ -88,17 +88,39 @@ Jetpack::Jetpack() {
 void Jetpack::Attach(Player* player) {
   this->player = player;
   animator.gameObject = (GameObject*)player;
-  player->AddComponent<PhysicBody>(
-      createJetpackBody(player->transform.position));
+  bodyId = createJetpackBody(player->transform.position);
+  player->AddComponent<PhysicBody>(bodyId);
   animator.PlayAnimation("running");
   isThrusting = false;
 }
 
 void Jetpack::Update() {
+  int bodyContactCapacity = b2Body_GetContactCapacity(bodyId);
+  b2ContactData contactData[bodyContactCapacity];
+  int bodyContactCount =
+      b2Body_GetContactData(bodyId, contactData, bodyContactCapacity);
+
+  onGround = false;
+  for (int i = 0; i < bodyContactCount; i++) {
+    b2BodyId bodyIdA = b2Shape_GetBody(contactData[i].shapeIdA);
+    b2BodyId bodyIdB = b2Shape_GetBody(contactData[i].shapeIdB);
+    if (B2_ID_EQUALS(bodyIdA, GameManager::Instance().groundId) ||
+        B2_ID_EQUALS(bodyIdB, GameManager::Instance().groundId)) {
+      onGround = true;
+      break;
+    }
+  }
+
   if (InputManager::Instance().IsKeyDown(sf::Keyboard::Space)) {
     isThrusting = true;
+    animator.PlayAnimation("flying");
   } else {
     isThrusting = false;
+    if (onGround) {
+      animator.PlayAnimation("running");
+    } else {
+      animator.PlayAnimation("falling");
+    }
   }
 
   animator.Update();

@@ -76,6 +76,6 @@ template Animator* GameObject::AddComponent<Animator, sf::Texture&>(
 template Animator* GameObject::GetComponent<Animator>();
 template void GameObject::RemoveComponent<Animator>();
 
-template PhysicBody* GameObject::AddComponent<PhysicBody, b2BodyId>(b2BodyId&&);
+template PhysicBody* GameObject::AddComponent<PhysicBody, b2BodyId&>(b2BodyId&);
 template PhysicBody* GameObject::GetComponent<PhysicBody>();
 template void GameObject::RemoveComponent<PhysicBody>();

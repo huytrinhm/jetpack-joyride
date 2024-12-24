@@ -19,6 +19,7 @@ class GameManager {
   sf::RenderTarget* renderTarget;
   b2WorldId worldId;
   b2BodyId playerPivotId;
+  b2BodyId groundId;
 
  private:
   GameManager() : renderTarget(nullptr) {}

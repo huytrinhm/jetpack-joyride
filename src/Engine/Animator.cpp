@@ -29,14 +29,16 @@ Animator::Animator(const sf::Texture& texture)
     : sprite(texture),
       currentAnimation(""),
       currentFrame(0),
-      elapsedTime(0.0f) {}
+      elapsedTime(0.0f),
+      inTransition(false) {}
 
 void Animator::SetTexture(const sf::Texture& texture) {
   sprite.setTexture(texture);
 }
 
-Animation* Animator::AddAnimation(const std::string& name) {
+Animation* Animator::AddAnimation(const std::string& name, bool isLoop) {
   animations[name] = Animation();
+  animations[name].isLoop = isLoop;
   return &animations[name];
 }
 
@@ -49,12 +51,35 @@ Animation& Animator::GetAnimation(const std::string& name) {
 }
 
 void Animator::PlayAnimation(const std::string& name) {
+  if (currentAnimation == name)
+    return;
+
   if (animations.find(name) != animations.end()) {
+    inTransition = false;
+    targetAnimation = "";
     currentAnimation = name;
     currentFrame = 0;
     elapsedTime = 0.0f;
     sprite.setTextureRect(animations[name].GetFrame(0));
   }
+}
+
+void Animator::PlayAnimationWithTransition(const std::string& newAnimation,
+                                           const std::string& transition) {
+  if (currentAnimation == newAnimation)
+    return;
+  if (animations.find(newAnimation) == animations.end()) {
+    throw std::runtime_error("Target animation not found: " + newAnimation);
+  }
+  if (animations.find(transition) == animations.end()) {
+    throw std::runtime_error("Transition animation not found: " + transition);
+  }
+
+  targetAnimation = newAnimation;
+  inTransition = true;
+  currentFrame = 0;
+  elapsedTime = 0.0f;
+  sprite.setTextureRect(animations[transition].GetFrame(0));
 }
 
 void Animator::Update() {
@@ -66,9 +91,19 @@ void Animator::Update() {
   elapsedTime += GameManager::Instance().deltaTime;
   while (elapsedTime >= frameTime) {
     elapsedTime -= frameTime;
-    currentFrame =
-        (currentFrame + 1) % animations[currentAnimation].GetFrameCount();
-
+    if (animations[currentAnimation].isLoop) {
+      currentFrame =
+          (currentFrame + 1) % animations[currentAnimation].GetFrameCount();
+    } else {
+      if (currentFrame + 1 < animations[currentAnimation].GetFrameCount()) {
+        currentFrame++;
+      } else {
+        currentFrame = animations[currentAnimation].GetFrameCount() -
+                       1;  // Stay on the last frame
+        if (inTransition)
+          PlayAnimation(targetAnimation);
+      }
+    }
     frameTime = animations[currentAnimation].GetFrameTime(currentFrame);
   }
   sf::IntRect frame = animations[currentAnimation].GetFrame(currentFrame);
