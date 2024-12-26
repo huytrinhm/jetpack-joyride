@@ -24,9 +24,11 @@ class Animation {
   sf::Vector2f GetOffset(int index);
   int GetFrameCount();
   float GetFrameTime(int index);
+  size_t GetLayer();
 
   std::vector<AnimationFrame> frames;
   bool isLoop;
+  size_t layer;
 };
 
 class Animator : public Component {
@@ -35,7 +37,9 @@ class Animator : public Component {
   Animator(const sf::Texture& texture);
 
   void SetTexture(const sf::Texture& texture);
-  Animation* AddAnimation(const std::string& name, bool isLoop = true);
+  Animation* AddAnimation(const std::string& name,
+                          bool isLoop = true,
+                          size_t layer = 6);
   Animation& GetAnimation(const std::string& name);
   void PlayAnimation(const std::string& name);
   void PlayAnimationWithTransition(const std::string& newAnimation,

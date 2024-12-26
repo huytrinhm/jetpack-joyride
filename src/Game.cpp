@@ -15,6 +15,7 @@
 #include "Engine/InputManager.h"
 #include "Player.h"
 #include "Room.h"
+#include "Zapper.h"
 #include "b2DrawSFML.h"
 
 void updateLetterbox(sf::RenderWindow& window, sf::Sprite& renderSprite) {
@@ -55,7 +56,11 @@ int main() {
 
   GameObjectManager gameObjectManager;
 
-  GameRenderer gameRenderer(4);
+  GameRenderer gameRenderer(10);
+  // layer 0-2: background
+  // layer 3-5: backEffects
+  // layer 6: player
+  // layer 7-9: frontEffects
 
   // Initialize rooms
   std::vector<Room> rooms;
@@ -79,7 +84,7 @@ int main() {
                          {sf::IntRect(4 * 128, 0, 4 * 128, 512), 0.5f}});
 
   auto backgroundRenderer =
-      std::make_unique<BackgroundRenderer>("BackgroundRenderer", rooms, 200.0f);
+      std::make_unique<BackgroundRenderer>("BackgroundRenderer", rooms);
   gameObjectManager.AddGameObject(std::move(backgroundRenderer));
 
   // Initialize box2d
@@ -111,6 +116,9 @@ int main() {
   auto player = std::make_unique<Player>("Player", vehicles[0].get());
   gameObjectManager.AddGameObject(std::move(player));
 
+  auto scrollerSpawner = std::make_unique<ScrollerSpawner>("ScrollerSpawner");
+  gameObjectManager.AddGameObject(std::move(scrollerSpawner));
+
   gameObjectManager.StartAll();
 
   // Main game loop
@@ -118,6 +126,11 @@ int main() {
   float accumulatedTime = 0.0f;
 
   while (window.isOpen()) {
+    if (game.gameState == GameState::GAME_OVER) {
+      game.EndGame();
+      break;
+    }
+
     // Event handling
     sf::Event event;
     while (window.pollEvent(event)) {
@@ -156,8 +169,6 @@ int main() {
     window.draw(renderSprite);
     window.display();
   }
-
-  b2DestroyWorld(game.worldId);
 
   return 0;
 }

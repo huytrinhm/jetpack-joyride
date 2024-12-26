@@ -10,9 +10,7 @@
 
 class BackgroundRenderer : public GameObject {
  public:
-  BackgroundRenderer(const std::string& name,
-                     const std::vector<Room>& rooms,
-                     float scrollSpeed);
+  BackgroundRenderer(const std::string& name, const std::vector<Room>& rooms);
   void Start() override;
   void Update() override;
   void Render(GameRenderer& renderer) override;
@@ -20,7 +18,6 @@ class BackgroundRenderer : public GameObject {
  private:
   std::deque<ActivePatch> activePatches;
   std::vector<Room> rooms;
-  float scrollSpeed;
   size_t currentRoomIndex;
   float currentLength;
 };

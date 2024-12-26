@@ -26,6 +26,8 @@ void AssetManager::Initialize() {
   LoadTexture("bgGlassTube0", "assets/bgGlassTube0.png");
   LoadTexture("bgStart", "assets/bgStart.png");
   LoadTexture("bullet", "assets/bullet.png");
+  LoadTexture("zapperHead", "assets/zapperHead.png");
+  LoadTexture("zapperEffect", "assets/zapEffects.png");
 
   LoadFont("Jetpackia", "assets/Jetpackia.ttf");
 }

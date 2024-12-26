@@ -25,6 +25,10 @@ float Animation::GetFrameTime(int index) {
   return frames[index].frameTime;
 }
 
+size_t Animation::GetLayer() {
+  return layer;
+}
+
 Animator::Animator(const sf::Texture& texture)
     : sprite(texture),
       currentAnimation(""),
@@ -36,9 +40,12 @@ void Animator::SetTexture(const sf::Texture& texture) {
   sprite.setTexture(texture);
 }
 
-Animation* Animator::AddAnimation(const std::string& name, bool isLoop) {
+Animation* Animator::AddAnimation(const std::string& name,
+                                  bool isLoop,
+                                  size_t layer) {
   animations[name] = Animation();
   animations[name].isLoop = isLoop;
+  animations[name].layer = layer;
   return &animations[name];
 }
 
@@ -120,5 +127,5 @@ void Animator::Render(GameRenderer& renderer) {
   if (currentAnimation.empty())
     return;
 
-  renderer.AddDrawable(2, &sprite);
+  renderer.AddDrawable(animations[currentAnimation].GetLayer(), &sprite);
 }

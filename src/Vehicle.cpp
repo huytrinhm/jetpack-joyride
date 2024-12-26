@@ -9,7 +9,8 @@
 #include "Utilities.h"
 #include "box2d/box2d.h"
 
-b2BodyId createJetpackBody(sf::Vector2f position) {
+b2BodyId createJetpackBody(Player* player) {
+  const sf::Vector2f position = player->transform.position;
   const b2Vec2 scale = pixelToMeter({18, 36});
 
   b2BodyDef bodyDef = b2DefaultBodyDef();
@@ -23,6 +24,7 @@ b2BodyId createJetpackBody(sf::Vector2f position) {
   b2ShapeDef shapeDef = b2DefaultShapeDef();
   shapeDef.friction = 0.0f;
   shapeDef.restitution = 0.0f;
+  shapeDef.userData = player;
 
   float radius = scale.x / 2;
   float centerOffset = scale.y / 2 - radius;
@@ -65,7 +67,7 @@ void JetpackBullet::Update() {
 void JetpackBullet::Render(GameRenderer& renderer) {
   if (!isActive)
     return;
-  renderer.AddDrawable(3, &sprite);
+  renderer.AddDrawable(7, &sprite);
 }
 
 void JetpackBullet::Activate(const sf::Vector2f& position, float angle) {
@@ -163,7 +165,7 @@ Jetpack::Jetpack() : bulletPool(30) {
 void Jetpack::Attach(Player* player) {
   this->player = player;
   animator.gameObject = (GameObject*)player;
-  bodyId = createJetpackBody(player->transform.position);
+  bodyId = createJetpackBody(player);
   player->AddComponent<PhysicBody>(bodyId);
   animator.PlayAnimation("running");
   isThrusting = false;

@@ -12,15 +12,12 @@ void BackgroundRenderer::Start() {
 }
 
 BackgroundRenderer::BackgroundRenderer(const std::string& name,
-                                       const std::vector<Room>& rooms,
-                                       float scrollSpeed)
-    : GameObject(name) {
-  this->rooms = rooms;
-  this->scrollSpeed = scrollSpeed;
-}
+                                       const std::vector<Room>& rooms)
+    : GameObject(name), rooms(rooms) {}
 
 void BackgroundRenderer::Update() {
-  float dx = -scrollSpeed * GameManager::Instance().deltaTime;
+  float dx =
+      -GameManager::Instance().scrollSpeed * GameManager::Instance().deltaTime;
 
   // Move all active patches
   for (auto& patch : activePatches) {

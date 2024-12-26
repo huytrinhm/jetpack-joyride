@@ -18,6 +18,7 @@ class Player : public GameObject {
 
  private:
   Vehicle* vehicle;
+  Vehicle* defaultVehicle;
 };
 
 #endif  // PLAYER_H

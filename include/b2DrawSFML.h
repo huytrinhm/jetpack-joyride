@@ -150,7 +150,7 @@ b2DebugDraw debugDraw = {DrawPolygon,
                          true,   // shapes
                          true,   // joints
                          true,   // joint extras
-                         false,  // aabbs
+                         true,   // aabbs
                          false,  // mass
                          true,   // contacts
                          true,   // colors

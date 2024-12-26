@@ -4,7 +4,7 @@
 #include "Engine/GameObject.h"
 #include "Utilities.h"
 
-PhysicBody::PhysicBody(b2BodyId bodyId) : bodyId(bodyId) {}
+PhysicBody::PhysicBody(b2BodyId bodyId) : bodyId(bodyId), totalForce({0, 0}) {}
 
 void PhysicBody::FixedUpdate() {
   b2Vec2 position = b2Body_GetPosition(bodyId);

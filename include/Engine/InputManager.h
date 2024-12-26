@@ -2,6 +2,7 @@
 #define INPUTMANAGER_H
 
 #include <SFML/Graphics.hpp>
+#include <unordered_map>
 
 class InputManager {
  public:

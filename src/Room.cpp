@@ -8,11 +8,11 @@ Room::Room(const std::string& atlasName,
            const sf::IntRect& endRect,
            const std::vector<std::pair<sf::IntRect, float>>& mainRects)
     : roomLength(roomLength),
-      startPatch(AssetManager::Instance().GetTexture(atlasName), startRect, 0),
-      endPatch(AssetManager::Instance().GetTexture(atlasName), endRect, 1) {
+      startPatch(AssetManager::Instance().GetTexture(atlasName), startRect, 1),
+      endPatch(AssetManager::Instance().GetTexture(atlasName), endRect, 2) {
   for (const auto& rect : mainRects) {
     mainPatches.emplace_back(AssetManager::Instance().GetTexture(atlasName),
-                             rect.first, 0);
+                             rect.first, 1);
     probabilities.push_back(rect.second);
   }
 }

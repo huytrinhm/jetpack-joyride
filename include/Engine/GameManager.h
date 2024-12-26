@@ -2,8 +2,10 @@
 #define GAMEMANAGER_H
 
 #include <SFML/Graphics.hpp>
-#include <unordered_map>
+#include <iostream>
 #include "box2d/box2d.h"
+
+enum class GameState { MENU, PLAYING, GAME_OVER };
 
 class GameManager {
  public:
@@ -17,10 +19,19 @@ class GameManager {
   float unscaledDeltaTime;
   float timeScale = 1.0f;
   float fixedDeltaTime = 1 / 60.f;
+  float scrollSpeed = 200.0f;
   sf::RenderTarget* renderTarget;
   b2WorldId worldId;
   b2BodyId playerPivotId;
   b2BodyId groundId;
+  GameState gameState = GameState::PLAYING;
+
+  void InitGame() {}
+  void EndGame() { b2DestroyWorld(this->worldId); }
+  void GameOver() {
+    std::cout << "GameOver" << std::endl;
+    gameState = GameState::GAME_OVER;
+  }
 
  private:
   GameManager() : renderTarget(nullptr) {}

@@ -17,7 +17,7 @@ class GameObject {
   std::string name;
   Transform transform;
 
-  GameObject(const std::string& name);
+  GameObject(const std::string& name = "");
 
   template <typename T, typename... Args>
   T* AddComponent(Args&&... args);
