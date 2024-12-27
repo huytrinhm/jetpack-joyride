@@ -98,6 +98,7 @@ void GameManager::InitGame() {
 
   clock = sf::Clock();
   accumulatedTime = 0.0f;
+  gameState = GameState::PLAYING;
 }
 
 void GameManager::MainLoop() {

@@ -24,7 +24,12 @@ int main() {
 
   game.InitGame();
 
-  while (window.isOpen() && game.gameState != GameState::GAME_OVER) {
+  while (window.isOpen() && game.gameState != GameState::QUIT) {
+    if (game.gameState == GameState::GAME_OVER) {
+      game.EndGame();
+      game.InitGame();
+    }
+
     // Event handling
     sf::Event event;
     while (window.pollEvent(event)) {

@@ -8,7 +8,7 @@
 #include "Room.h"
 #include "box2d/box2d.h"
 
-enum class GameState { MENU, PLAYING, GAME_OVER };
+enum class GameState { MENU, PLAYING, GAME_OVER, QUIT };
 
 class GameManager {
  public:
