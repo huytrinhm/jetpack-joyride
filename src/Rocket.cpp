@@ -12,8 +12,6 @@ Rocket::Rocket(float delayDuration, float aimDuration, float lockDuration)
       delayDuration(delayDuration),
       aimDuration(aimDuration),
       lockDuration(lockDuration) {
-  transform.position = {WORLD_WIDTH + 30,
-                        GameManager::Instance().player->GetPosition().y};
   animator = this->AddComponent<Animator>(
       AssetManager::Instance().GetTexture("rocket"));
   auto aimAnimation = animator->AddAnimation("aim", true, 9);
@@ -39,6 +37,8 @@ void Rocket::Update() {
   switch (state) {
     case State::Delay:
       if (stateTime >= delayDuration) {
+        transform.position = {WORLD_WIDTH + 30,
+                              GameManager::Instance().player->GetPosition().y};
         state = State::Aim;
         stateTime = 0.0f;
       }
