@@ -3,6 +3,7 @@
 #include "Config.h"
 #include "Engine/InputManager.h"
 #include "GameManager.h"
+#include "Menu.h"
 #include "Utilities.h"
 
 int main() {
@@ -22,14 +23,10 @@ int main() {
   GameManager& game = GameManager::Instance();
   game.renderTarget = &renderTexture;
 
-  game.InitGame();
+  Menu menu;
+  game.gameState = GameState::MENU;
 
   while (window.isOpen() && game.gameState != GameState::QUIT) {
-    if (game.gameState == GameState::GAME_OVER) {
-      game.EndGame();
-      game.InitGame();
-    }
-
     // Event handling
     sf::Event event;
     while (window.pollEvent(event)) {
@@ -42,14 +39,28 @@ int main() {
 
     InputManager::Instance().Update(window);
 
-    game.MainLoop();
-
-    window.clear();
-    window.draw(renderSprite);
-    window.display();
+    switch (game.gameState) {
+      case GameState::MENU:
+        menu.DisplayMenu(renderTexture);
+        window.clear();
+        window.draw(renderSprite);
+        window.display();
+        break;
+      case GameState::GAME_OVER:
+        game.EndGame();
+        game.gameState = GameState::MENU;
+        break;
+      case GameState::PLAYING:
+        game.MainLoop();
+        window.clear();
+        window.draw(renderSprite);
+        window.display();
+        break;
+      default:
+        break;
+    }
   }
 
-  game.EndGame();
   window.close();
   return 0;
 }
