@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "Player.h"
 #include "box2d/box2d.h"
 
 enum class GameState { MENU, PLAYING, GAME_OVER };
@@ -25,6 +26,7 @@ class GameManager {
   b2BodyId playerPivotId;
   b2BodyId groundId;
   GameState gameState = GameState::PLAYING;
+  Player* player;
 
   void InitGame() {}
   void EndGame() { b2DestroyWorld(this->worldId); }

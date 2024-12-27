@@ -10,7 +10,20 @@
 #include "Vehicle.h"
 #include "box2d/box2d.h"
 
-Player::Player(Vehicle* defaultVehicle) : defaultVehicle(defaultVehicle) {}
+Player::Player(Vehicle* defaultVehicle) : defaultVehicle(defaultVehicle) {
+  shieldAnimator = this->AddComponent<Animator>(
+      AssetManager::Instance().GetTexture("shieldField"));
+  auto animation = shieldAnimator->AddAnimation("default", true, 7);
+  animation->frames.emplace_back(sf::IntRect{0, 0, 64, 64}, 1.0f,
+                                 sf::Vector2f{-4, 0});
+  animation->frames.emplace_back(sf::IntRect{64, 0, 64, 64}, 1.0f,
+                                 sf::Vector2f{-4, 0});
+  for (int i = 2; i < 5; i++)
+    animation->frames.emplace_back(
+        sf::IntRect{(i % 4) * 64, (i / 4) * 64, 64, 64}, 0.1f,
+        sf::Vector2f{-4, 0});
+  shieldAnimator->PlayAnimation("default");
+}
 
 void Player::Start() {
   transform.position = {150, 100};
@@ -41,6 +54,8 @@ void Player::FixedUpdate() {
 
 void Player::Render(GameRenderer& renderer) {
   vehicle->Render(renderer);
+  if (isShielded && !vehicle->isDestroyable)
+    shieldAnimator->Render(renderer);
 }
 
 void Player::Equip(Vehicle* vehicle) {
@@ -52,9 +67,23 @@ void Player::HandleHarmfulCollision() {
   if (vehicle->isDestroyable) {
     vehicle->Destroy();
     Equip(defaultVehicle);
+  } else if (isShielded) {
+    SetShield(false);
   } else {
     GameManager::Instance().GameOver();
   }
 }
 
 void Player::HandlePickupCollision() {}
+
+void Player::SetShield(bool isShielded) {
+  this->isShielded = isShielded;
+}
+
+bool Player::IsShielded() {
+  return isShielded;
+}
+
+bool Player::InVehicle() {
+  return vehicle != defaultVehicle;
+}

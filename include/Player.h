@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include <SFML/Graphics.hpp>
+#include "Engine/Animator.h"
 #include "Engine/GameObject.h"
 #include "Engine/GameRenderer.h"
 #include "Vehicle.h"
@@ -17,10 +18,15 @@ class Player : public GameObject {
   void Equip(Vehicle* vehicle);
   void HandleHarmfulCollision();
   void HandlePickupCollision();
+  void SetShield(bool isShielded);
+  bool IsShielded();
+  bool InVehicle();
 
  private:
   Vehicle* vehicle;
   Vehicle* defaultVehicle;
+  bool isShielded = false;
+  Animator* shieldAnimator;
 };
 
 #endif  // PLAYER_H

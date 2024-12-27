@@ -115,14 +115,18 @@ int main() {
   vehicles.push_back(std::make_shared<Jetpack>());
 
   auto player = std::make_unique<Player>(vehicles[0].get());
+  game.player = player.get();
   gameObjectManager.AddGameObject(std::move(player));
 
   auto scrollerSpawner = std::make_unique<ScrollerSpawner>("ScrollerSpawner");
   gameObjectManager.AddGameObject(std::move(scrollerSpawner));
 
-  auto dummyShield =
-      std::make_unique<ShieldPickup>(sf::Vector2f(500, 200), 2, 0, 50);
-  gameObjectManager.AddGameObject(std::move(dummyShield));
+  // auto dummyShield =
+  //     std::make_unique<ShieldPickup>(sf::Vector2f(500, 200), 2, 0, 50);
+  // gameObjectManager.AddGameObject(std::move(dummyShield));
+
+  auto pickupSpawner = std::make_unique<PickupSpawner>();
+  gameObjectManager.AddGameObject(std::move(pickupSpawner));
 
   gameObjectManager.StartAll();
 
@@ -160,7 +164,6 @@ int main() {
       gameObjectManager.FixedUpdateAll();
       accumulatedTime -= game.fixedDeltaTime;
     }
-
     gameObjectManager.UpdateAll();
 
     // Render

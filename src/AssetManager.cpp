@@ -29,6 +29,7 @@ void AssetManager::Initialize() {
   LoadTexture("zapperHead", "assets/zapperHead.png");
   LoadTexture("zapperEffect", "assets/zapEffects.png");
   LoadTexture("shield", "assets/shield.png");
+  LoadTexture("shieldField", "assets/shieldField.png");
 
   LoadFont("Jetpackia", "assets/Jetpackia.ttf");
 }

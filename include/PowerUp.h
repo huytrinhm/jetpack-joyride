@@ -34,17 +34,23 @@ class ShieldPickup : public Pickup {
   void Collide(Player* player) override;
 };
 
-// class PickupSpawner : public GameObject {
-//  public:
-//   // void Start() override;
-//   void Update() override;
-//   void FixedUpdate() override;
-//   void Render(GameRenderer& renderer) override;
+class PickupSpawner : public GameObject {
+ public:
+  PickupSpawner();
+  // void Start() override;
+  void Update() override;
+  void FixedUpdate() override;
+  void Render(GameRenderer& renderer) override;
 
-//  private:
-//   float scrollerDistance;
-//   float spawnDistance;
-//   std::deque<std::unique_ptr<Pickup>> pickups;
-// };
+ private:
+  float scrollerDistance;
+  float spawnDistance;
+  std::deque<std::unique_ptr<Pickup>> pickups;
+
+  void SpawnRandomPickup();
+  void RemovePassedPickups();
+
+  void SpawnShieldPickup();
+};
 
 #endif  // POWERUP_H
