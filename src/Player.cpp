@@ -2,8 +2,8 @@
 #include <iostream>
 #include "AssetManager.h"
 #include "Engine/Animator.h"
-#include "Engine/GameManager.h"
 #include "Engine/PhysicBody.h"
+#include "GameManager.h"
 #include "Harmful.h"
 #include "PowerUp.h"
 #include "Utilities.h"

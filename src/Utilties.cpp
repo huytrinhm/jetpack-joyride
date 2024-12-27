@@ -34,3 +34,18 @@ b2Capsule makeHorizontalCapsule(float w, float h) {
   b2Capsule capsule = {{-centerOffset, 0}, {centerOffset, 0}, radius};
   return capsule;
 }
+
+void updateLetterbox(sf::RenderWindow& window, sf::Sprite& renderSprite) {
+  float windowWidth = static_cast<float>(window.getSize().x);
+  float windowHeight = static_cast<float>(window.getSize().y);
+  float scaleX = windowWidth / WORLD_WIDTH;
+  float scaleY = windowHeight / WORLD_HEIGHT;
+  float scale = std::min(scaleX, scaleY);
+  float offsetX = (windowWidth - WORLD_WIDTH * scale) / 2;
+  float offsetY = (windowHeight - WORLD_HEIGHT * scale) / 2;
+
+  window.setView(sf::View(sf::FloatRect(0, 0, windowWidth, windowHeight)));
+
+  renderSprite.setScale(scale, scale);
+  renderSprite.setPosition(offsetX, offsetY);
+}

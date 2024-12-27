@@ -1,8 +1,8 @@
 #include "Rocket.h"
 #include "AssetManager.h"
 #include "Config.h"
-#include "Engine/GameManager.h"
 #include "Engine/PhysicBody.h"
+#include "GameManager.h"
 #include "Utilities.h"
 
 Rocket::Rocket(float delayDuration, float aimDuration, float lockDuration)

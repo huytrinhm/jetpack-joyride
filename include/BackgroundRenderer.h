@@ -1,5 +1,5 @@
-#ifndef BACKGROUNDRENDERER_H
-#define BACKGROUNDRENDERER_H
+#ifndef BACKGROUND_RENDERER_H
+#define BACKGROUND_RENDERER_H
 
 #include <deque>
 #include <vector>
@@ -22,4 +22,4 @@ class BackgroundRenderer : public GameObject {
   float currentLength;
 };
 
-#endif  // BACKGROUNDRENDERER_H
+#endif  // BACKGROUND_RENDERER_H

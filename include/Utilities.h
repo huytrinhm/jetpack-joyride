@@ -13,4 +13,6 @@ int randomIntInRange(int min, int max);
 float randomFloatInRange(float min, float max);
 b2Capsule makeHorizontalCapsule(float w, float h);
 
+void updateLetterbox(sf::RenderWindow& window, sf::Sprite& renderSprite);
+
 #endif  // UTILITIES_H

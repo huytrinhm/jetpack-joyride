@@ -19,9 +19,7 @@ class Zapper : public HarmfulGameObject {
          const sf::Vector2f& position,
          int length,
          bool isActive = true);
-  //   void Start() override;
   void Update() override;
-  //   void FixedUpdate() override;
   void Render(GameRenderer& renderer) override;
 
  private:

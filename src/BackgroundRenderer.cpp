@@ -1,6 +1,6 @@
 #include "BackgroundRenderer.h"
 #include "Config.h"
-#include "Engine/GameManager.h"
+#include "GameManager.h"
 
 void BackgroundRenderer::Start() {
   transform.position = sf::Vector2f(0, -76);

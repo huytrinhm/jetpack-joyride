@@ -1,6 +1,6 @@
 #include "ScrollerSpawner.h"
 #include "Config.h"
-#include "Engine/GameManager.h"
+#include "GameManager.h"
 #include "Utilities.h"
 
 ScrollerSpawner::ScrollerSpawner(float spawnDistance, float variance)

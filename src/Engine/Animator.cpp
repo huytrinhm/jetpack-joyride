@@ -1,8 +1,8 @@
 #include "Engine/Animator.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "Engine/GameManager.h"
 #include "Engine/GameObject.h"
+#include "GameManager.h"
 
 AnimationFrame::AnimationFrame(sf::IntRect frame,
                                float frameTime,

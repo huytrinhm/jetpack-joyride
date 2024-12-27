@@ -1,7 +1,7 @@
 #include "Engine/PhysicBody.h"
 #include <iostream>
-#include "Engine/GameManager.h"
 #include "Engine/GameObject.h"
+#include "GameManager.h"
 #include "Utilities.h"
 
 PhysicBody::PhysicBody(b2BodyId bodyId) : bodyId(bodyId), totalForce({0, 0}) {}

@@ -1,5 +1,5 @@
 #include "Config.h"
-#include "Engine/GameManager.h"
+#include "GameManager.h"
 #include "SFML/Graphics.hpp"
 #include "Utilities.h"
 #include "box2d/box2d.h"

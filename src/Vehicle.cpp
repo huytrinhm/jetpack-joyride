@@ -2,9 +2,9 @@
 #include <SFML/Graphics.hpp>
 #include "AssetManager.h"
 #include "Config.h"
-#include "Engine/GameManager.h"
 #include "Engine/InputManager.h"
 #include "Engine/PhysicBody.h"
+#include "GameManager.h"
 #include "Player.h"
 #include "Utilities.h"
 #include "box2d/box2d.h"
