@@ -79,31 +79,9 @@ ShieldPickup::ShieldPickup(sf::Vector2f position,
                            float amplitude)
     : Pickup(position, "shield", period, phi, amplitude) {}
 
-PickupSpawner::PickupSpawner() : scrollerDistance(0), spawnDistance(2000) {}
+PickupSpawner::PickupSpawner() : ScrollerSpawner(2600, 400) {}
 
-void PickupSpawner::Update() {
-  scrollerDistance +=
-      GameManager::Instance().scrollSpeed * GameManager::Instance().deltaTime;
-
-  if (scrollerDistance > spawnDistance) {
-    scrollerDistance = 0;
-    SpawnRandomPickup();
-  }
-
-  for (auto& pickup : pickups) {
-    pickup->DoUpdate();
-  }
-
-  RemovePassedPickups();
-}
-
-void PickupSpawner::FixedUpdate() {
-  for (auto& pickup : pickups) {
-    pickup->DoFixedUpdate();
-  }
-}
-
-void PickupSpawner::SpawnRandomPickup() {
+void PickupSpawner::Spawn() {
   int options = 0;
   if (!GameManager::Instance().player->IsShielded() &&
       !GameManager::Instance().player->InVehicle())
@@ -127,19 +105,7 @@ void PickupSpawner::SpawnShieldPickup() {
   float phi = randomFloatInRange(0.0f, 2 * B2_PI);
   float amplitude = randomFloatInRange(30.0f, 50.0f);
 
-  pickups.emplace_back(std::make_unique<ShieldPickup>(
+  objects.emplace_back(std::make_unique<ShieldPickup>(
       sf::Vector2f{WORLD_WIDTH + 100, WORLD_HEIGHT / 2}, period, phi,
       amplitude));
-}
-
-void PickupSpawner::RemovePassedPickups() {
-  while (!pickups.empty() && pickups.front()->transform.position.x < -100) {
-    pickups.pop_front();
-  }
-}
-
-void PickupSpawner::Render(GameRenderer& renderer) {
-  for (auto& pickup : pickups) {
-    pickup->Render(renderer);
-  }
 }

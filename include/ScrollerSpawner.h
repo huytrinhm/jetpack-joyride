@@ -2,23 +2,23 @@
 #define SCROLLER_SPAWNER_H
 
 #include <deque>
+#include <memory>
 #include "Engine/GameObject.h"
-#include "Zapper.h"
 
 class ScrollerSpawner : public GameObject {
  public:
-  ScrollerSpawner(const std::string& name);
-  // void Start() override;
+  ScrollerSpawner(float spawnDistance, float variance = 0);
   void Update() override;
   void FixedUpdate() override;
   void Render(GameRenderer& renderer) override;
 
- private:
+ protected:
   float scrollerDistance;
   float spawnDistance;
-  std::deque<Zapper> zappers;
-  void SpawnRandomZapper();
-  void RemovePassedZappers();
+  float variance;
+  std::deque<std::unique_ptr<GameObject>> objects;
+  virtual void Spawn() = 0;
+  virtual void Cleanup();
 };
 
 #endif  // SCROLLER_SPAWNER_H

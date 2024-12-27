@@ -11,5 +11,6 @@ sf::Vector2f meterToPixel(b2Vec2 meter);
 
 int randomIntInRange(int min, int max);
 float randomFloatInRange(float min, float max);
+b2Capsule makeHorizontalCapsule(float w, float h);
 
 #endif  // UTILITIES_H

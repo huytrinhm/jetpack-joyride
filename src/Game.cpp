@@ -15,8 +15,10 @@
 #include "Engine/InputManager.h"
 #include "Player.h"
 #include "PowerUp.h"
+#include "Rocket.h"
+#include "RocketSpawner.h"
 #include "Room.h"
-#include "ScrollerSpawner.h"
+#include "RoomSpawner.h"
 #include "b2DrawSFML.h"
 
 void updateLetterbox(sf::RenderWindow& window, sf::Sprite& renderSprite) {
@@ -118,8 +120,8 @@ int main() {
   game.player = player.get();
   gameObjectManager.AddGameObject(std::move(player));
 
-  auto scrollerSpawner = std::make_unique<ScrollerSpawner>("ScrollerSpawner");
-  gameObjectManager.AddGameObject(std::move(scrollerSpawner));
+  auto roomSpawner = std::make_unique<RoomSpawner>();
+  gameObjectManager.AddGameObject(std::move(roomSpawner));
 
   // auto dummyShield =
   //     std::make_unique<ShieldPickup>(sf::Vector2f(500, 200), 2, 0, 50);
@@ -127,6 +129,9 @@ int main() {
 
   auto pickupSpawner = std::make_unique<PickupSpawner>();
   gameObjectManager.AddGameObject(std::move(pickupSpawner));
+
+  auto rocketSpawner = std::make_unique<RocketSpawner>();
+  gameObjectManager.AddGameObject(std::move(rocketSpawner));
 
   gameObjectManager.StartAll();
 

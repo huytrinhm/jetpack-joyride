@@ -30,6 +30,8 @@ void AssetManager::Initialize() {
   LoadTexture("zapperEffect", "assets/zapEffects.png");
   LoadTexture("shield", "assets/shield.png");
   LoadTexture("shieldField", "assets/shieldField.png");
+  LoadTexture("rocket", "assets/rocket.png");
+  LoadTexture("rocketAlert", "assets/rocketAlert.png");
 
   LoadFont("Jetpackia", "assets/Jetpackia.ttf");
 }

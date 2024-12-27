@@ -6,6 +6,7 @@
 #include "CollidableGameObject.h"
 #include "Engine/Component.h"
 #include "Engine/GameObject.h"
+#include "ScrollerSpawner.h"
 #include "box2d/box2d.h"
 
 class Pickup : public CollidableGameObject {
@@ -34,21 +35,12 @@ class ShieldPickup : public Pickup {
   void Collide(Player* player) override;
 };
 
-class PickupSpawner : public GameObject {
+class PickupSpawner : public ScrollerSpawner {
  public:
   PickupSpawner();
-  // void Start() override;
-  void Update() override;
-  void FixedUpdate() override;
-  void Render(GameRenderer& renderer) override;
 
  private:
-  float scrollerDistance;
-  float spawnDistance;
-  std::deque<std::unique_ptr<Pickup>> pickups;
-
-  void SpawnRandomPickup();
-  void RemovePassedPickups();
+  void Spawn() override;
 
   void SpawnShieldPickup();
 };

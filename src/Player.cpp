@@ -87,3 +87,7 @@ bool Player::IsShielded() {
 bool Player::InVehicle() {
   return vehicle != defaultVehicle;
 }
+
+sf::Vector2f Player::GetPosition() const {
+  return transform.position;
+}

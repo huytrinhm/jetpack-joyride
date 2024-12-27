@@ -55,9 +55,7 @@ Zapper::Zapper(ZapperType zapperType,
   shapeDef.isSensor = true;
   shapeDef.userData = static_cast<CollidableGameObject*>(this);
 
-  float radius = scale.x / 2;
-  float centerOffset = scale.y / 2 - radius;
-  b2Capsule capsule = {{-centerOffset, 0}, {centerOffset, 0}, radius};
+  b2Capsule capsule = makeHorizontalCapsule(scale.y, scale.x);
   b2CreateCapsuleShape(bodyId, &shapeDef, &capsule);
 
   this->AddComponent<PhysicBody>(bodyId);

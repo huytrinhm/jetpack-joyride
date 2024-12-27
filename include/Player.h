@@ -21,6 +21,7 @@ class Player : public GameObject {
   void SetShield(bool isShielded);
   bool IsShielded();
   bool InVehicle();
+  sf::Vector2f GetPosition() const;
 
  private:
   Vehicle* vehicle;

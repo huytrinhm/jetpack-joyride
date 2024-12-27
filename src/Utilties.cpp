@@ -27,3 +27,10 @@ float randomFloatInRange(float min, float max) {
   return min + static_cast<float>(rand()) /
                    (static_cast<float>(RAND_MAX / (max - min)));
 }
+
+b2Capsule makeHorizontalCapsule(float w, float h) {
+  float radius = h / 2;
+  float centerOffset = w / 2 - radius;
+  b2Capsule capsule = {{-centerOffset, 0}, {centerOffset, 0}, radius};
+  return capsule;
+}

@@ -4,6 +4,7 @@
 #include "Engine/Animator.h"
 #include "Engine/GameObject.h"
 #include "Harmful.h"
+#include "ScrollerSpawner.h"
 
 enum ZapperType {
   ZAPPER_HORIZONTAL,
