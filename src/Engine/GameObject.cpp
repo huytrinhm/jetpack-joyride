@@ -1,7 +1,6 @@
 #include "Engine/GameObject.h"
 #include "Engine/Animator.h"
 #include "Engine/PhysicBody.h"
-#include "Harmful.h"
 
 GameObject::GameObject(const std::string& name) : name(name) {
   transform.gameObject = this;
@@ -80,7 +79,3 @@ template void GameObject::RemoveComponent<Animator>();
 template PhysicBody* GameObject::AddComponent<PhysicBody, b2BodyId&>(b2BodyId&);
 template PhysicBody* GameObject::GetComponent<PhysicBody>();
 template void GameObject::RemoveComponent<PhysicBody>();
-
-template Harmful* GameObject::AddComponent<Harmful>();
-template Harmful* GameObject::GetComponent<Harmful>();
-template void GameObject::RemoveComponent<Harmful>();

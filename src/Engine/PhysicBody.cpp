@@ -22,6 +22,10 @@ void PhysicBody::ApplyForce(b2Vec2 force) {
   totalForce += force;
 }
 
+void PhysicBody::SetVelocity(b2Vec2 velocity) {
+  b2Body_SetLinearVelocity(bodyId, velocity);
+}
+
 PhysicBody::~PhysicBody() {
   if (b2Body_IsValid(bodyId))
     b2DestroyBody(bodyId);

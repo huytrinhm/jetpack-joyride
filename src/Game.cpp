@@ -14,6 +14,7 @@
 #include "Engine/GameRenderer.h"
 #include "Engine/InputManager.h"
 #include "Player.h"
+#include "PowerUp.h"
 #include "Room.h"
 #include "Zapper.h"
 #include "b2DrawSFML.h"
@@ -113,11 +114,15 @@ int main() {
   std::vector<std::shared_ptr<Vehicle>> vehicles;
   vehicles.push_back(std::make_shared<Jetpack>());
 
-  auto player = std::make_unique<Player>("Player", vehicles[0].get());
+  auto player = std::make_unique<Player>(vehicles[0].get());
   gameObjectManager.AddGameObject(std::move(player));
 
   auto scrollerSpawner = std::make_unique<ScrollerSpawner>("ScrollerSpawner");
   gameObjectManager.AddGameObject(std::move(scrollerSpawner));
+
+  auto dummyShield =
+      std::make_unique<ShieldPickup>(sf::Vector2f(500, 200), 2, 0, 50);
+  gameObjectManager.AddGameObject(std::move(dummyShield));
 
   gameObjectManager.StartAll();
 
@@ -162,7 +167,7 @@ int main() {
     renderTexture.clear(sf::Color::Black);
     gameObjectManager.RenderAll(gameRenderer);
     gameRenderer.Render(renderTexture);
-    // b2World_Draw(game.worldId, &DebugDraw::debugDraw);
+    b2World_Draw(game.worldId, &DebugDraw::debugDraw);
     renderTexture.display();
 
     window.clear();

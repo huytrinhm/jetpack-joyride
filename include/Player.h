@@ -8,13 +8,15 @@
 
 class Player : public GameObject {
  public:
-  Player(const std::string& name, Vehicle* defaultVehicle);
+  Player(Vehicle* defaultVehicle);
 
   void Start() override;
   void Update() override;
   void FixedUpdate() override;
   void Render(GameRenderer& renderer) override;
   void Equip(Vehicle* vehicle);
+  void HandleHarmfulCollision();
+  void HandlePickupCollision();
 
  private:
   Vehicle* vehicle;

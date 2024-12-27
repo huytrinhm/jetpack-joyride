@@ -102,15 +102,11 @@ void DrawSolidCircle(b2Transform transform,
                      float radius,
                      b2HexColor color,
                      void* context) {
-  // b2Vec2 center = transform.p;
-  // sf::CircleShape circle = sf::CircleShape(radius);
-  // circle.setFillColor(
-  //     sf::Color(color & 0xff0000, color & 0x00ff00, color & 0x0000ff));
-  // sf::Vector2f pos = sf::Vector2f{center.x, center.y};
-  // circle.setPosition(pos - sf::Vector2f(radius, radius));
-  // static_cast<sf::RenderTarget*>(context)->draw(circle);
-  // std::cerr << "DrawSolidCircle" << std::endl;
-  throw std::runtime_error("DrawSolidCircle not implemented");
+  sf::CircleShape circle = sf::CircleShape(meterToPixel(radius));
+  circle.setFillColor(from_b2HexColor(color));
+  circle.setOrigin(meterToPixel(radius), meterToPixel(radius));
+  circle.setPosition(meterToPixel(transform.p));
+  static_cast<sf::RenderTarget*>(context)->draw(circle);
 }
 
 void DrawSegment(b2Vec2 p1, b2Vec2 p2, b2HexColor color, void* context) {

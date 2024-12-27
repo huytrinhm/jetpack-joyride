@@ -5,12 +5,12 @@
 #include "Engine/GameManager.h"
 #include "Engine/PhysicBody.h"
 #include "Harmful.h"
+#include "PowerUp.h"
 #include "Utilities.h"
 #include "Vehicle.h"
 #include "box2d/box2d.h"
 
-Player::Player(const std::string& name, Vehicle* defaultVehicle)
-    : GameObject(name), defaultVehicle(defaultVehicle) {}
+Player::Player(Vehicle* defaultVehicle) : defaultVehicle(defaultVehicle) {}
 
 void Player::Start() {
   transform.position = {150, 100};
@@ -31,17 +31,11 @@ void Player::FixedUpdate() {
     if (visitorData != this)
       continue;
 
-    // Check if sensorData is Harmful
-    Harmful* harmful = static_cast<Harmful*>(sensorData);
-    if (harmful) {
-      if (vehicle->isDestroyable) {
-        vehicle->Destroy();
-        Equip(defaultVehicle);
-      } else {
-        GameManager::Instance().GameOver();
-      }
-    }
+    CollidableGameObject* other =
+        static_cast<CollidableGameObject*>(sensorData);
+    other->Collide(this);
   }
+
   vehicle->FixedUpdate();
 }
 
@@ -53,3 +47,14 @@ void Player::Equip(Vehicle* vehicle) {
   this->vehicle = vehicle;
   vehicle->Attach(this);
 }
+
+void Player::HandleHarmfulCollision() {
+  if (vehicle->isDestroyable) {
+    vehicle->Destroy();
+    Equip(defaultVehicle);
+  } else {
+    GameManager::Instance().GameOver();
+  }
+}
+
+void Player::HandlePickupCollision() {}

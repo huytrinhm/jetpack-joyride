@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 #include "Component.h"
-#include "Engine/GameRenderer.h"
+#include "GameRenderer.h"
 #include "Transform.h"
 
 class GameObject {

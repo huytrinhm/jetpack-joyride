@@ -4,6 +4,7 @@
 #include <deque>
 #include "Engine/Animator.h"
 #include "Engine/GameObject.h"
+#include "Harmful.h"
 
 enum ZapperType {
   ZAPPER_HORIZONTAL,
@@ -12,7 +13,7 @@ enum ZapperType {
   ZAPPER_SUB_DIAGONAL
 };
 
-class Zapper : public GameObject {
+class Zapper : public HarmfulGameObject {
  public:
   Zapper(ZapperType zapperType,
          const sf::Vector2f& position,
@@ -55,7 +56,6 @@ class ScrollerSpawner : public GameObject {
 #include "Engine/Animator.h"
 #include "Engine/GameManager.h"
 #include "Engine/PhysicBody.h"
-#include "Harmful.h"
 #include "Utilities.h"
 #include "box2d/box2d.h"
 
@@ -104,7 +104,7 @@ Zapper::Zapper(ZapperType zapperType,
 
   b2ShapeDef shapeDef = b2DefaultShapeDef();
   shapeDef.isSensor = true;
-  shapeDef.userData = this->AddComponent<Harmful>();
+  shapeDef.userData = static_cast<CollidableGameObject*>(this);
 
   float radius = scale.x / 2;
   float centerOffset = scale.y / 2 - radius;
@@ -123,15 +123,7 @@ sf::IntRect getZapperHeadFrame(int frame) {
 }
 
 void Zapper::Render(GameRenderer& renderer) {
-  if (!isActive)
-    return;
-
   zapperRenderTexture.clear(sf::Color::Transparent);
-  // sf::Vertex line[] = {sf::Vertex({1, 1}),
-  //                      sf::Vertex({length * 16 + 2 * 32 - 1, 1}),
-  //                      sf::Vertex({length * 16 + 2 * 32 - 1, 28}),
-  //                      sf::Vertex({1, 28}), sf::Vertex({1, 1})};
-  // zapperEffectRenderTexture.draw(line, 5, sf::LinesStrip);
 
   for (int i = 0; i < length; i++) {
     zapperEffectSprite.setPosition({32 + 16.f * i, 1});
@@ -156,9 +148,6 @@ void Zapper::Render(GameRenderer& renderer) {
 }
 
 void Zapper::Update() {
-  if (!isActive)
-    return;
-
   zapperSprite.setPosition(transform.position);
 }
 
