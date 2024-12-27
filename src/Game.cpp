@@ -16,7 +16,7 @@
 #include "Player.h"
 #include "PowerUp.h"
 #include "Room.h"
-#include "Zapper.h"
+#include "ScrollerSpawner.h"
 #include "b2DrawSFML.h"
 
 void updateLetterbox(sf::RenderWindow& window, sf::Sprite& renderSprite) {
