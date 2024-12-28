@@ -59,6 +59,7 @@ void Player::Render(GameRenderer& renderer) {
 }
 
 void Player::Equip(Vehicle* vehicle) {
+  RemoveComponent<PhysicBody>();
   this->vehicle = vehicle;
   vehicle->Attach(this);
 }

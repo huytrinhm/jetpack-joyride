@@ -27,6 +27,7 @@ class GameManager {
   b2WorldId worldId;
   b2BodyId playerPivotId;
   b2BodyId groundId;
+  b2BodyId ceilingId;
   GameState gameState = GameState::PLAYING;
   Player* player;
 
@@ -34,6 +35,9 @@ class GameManager {
   void MainLoop();
   void EndGame();
   void GameOver();
+
+  void AddVehicle(std::string name, std::unique_ptr<Vehicle>&& vehicle);
+  Vehicle* GetVehicle(const std::string& name);
 
  private:
   GameManager();
@@ -43,7 +47,7 @@ class GameManager {
   std::unique_ptr<GameObjectManager> gameObjectManager;
   std::unique_ptr<GameRenderer> gameRenderer;
   std::vector<Room> rooms;
-  std::vector<std::unique_ptr<Vehicle>> vehicles;
+  std::unordered_map<std::string, std::unique_ptr<Vehicle>> vehicles;
 
   sf::Clock clock;
   float accumulatedTime;

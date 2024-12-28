@@ -71,4 +71,36 @@ class Jetpack : public Vehicle {
   float fireCounter;  // Time counter for firing bullets
 };
 
+class GravitySuit : public Vehicle {
+ public:
+  GravitySuit();
+  void Attach(Player* player) override;
+  void Update() override;
+  void FixedUpdate() override;
+  void Render(GameRenderer& renderer) override;
+  void Destroy() override;
+
+ private:
+  bool onGround;
+  bool canUseSkill;
+  bool isInverted;
+};
+
+// class Stomper : public Vehicle {
+//  public:
+//   Stomper();
+//   void Attach(Player* player) override;
+//   void Update() override;
+//   void FixedUpdate() override;
+//   void Render(GameRenderer& renderer) override;
+//   void Destroy() override;
+
+//  private:
+//   bool isThrusting;
+//   float thrustForce = 40.f;
+//   float thrustDecay = 10.f;
+//   float jumpForce = 20.f;
+//   bool onGround;
+// };
+
 #endif  // VEHICLE_H

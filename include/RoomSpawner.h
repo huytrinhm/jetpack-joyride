@@ -9,6 +9,8 @@ class RoomSpawner : public ScrollerSpawner {
 
  private:
   void Spawn() override;
+  void SpawnZapper();
+  void SpawnVehiclePickup();
 };
 
 #endif  // ROOM_SPAWNER_H

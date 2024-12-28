@@ -34,6 +34,8 @@ void AssetManager::Initialize() {
   LoadTexture("rocketAlert", "assets/rocketAlert.png");
   LoadTexture("menuBackground", "assets/menuBackground.png");
   LoadTexture("menuButtons", "assets/menuButtons.png");
+  LoadTexture("vehiclePickup", "assets/vehiclePickup.png");
+  LoadTexture("gravitySuit", "assets/gravitySuit.png");
 
   LoadFont("Jetpackia", "assets/Jetpackia.ttf");
 }

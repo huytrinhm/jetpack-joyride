@@ -30,3 +30,7 @@ PhysicBody::~PhysicBody() {
   if (b2Body_IsValid(bodyId))
     b2DestroyBody(bodyId);
 }
+
+void PhysicBody::SetGravityScale(float scale) {
+  b2Body_SetGravityScale(bodyId, scale);
+}

@@ -2,6 +2,7 @@
 #define INPUTMANAGER_H
 
 #include <SFML/Graphics.hpp>
+#include <iostream>
 #include <unordered_map>
 
 class InputManager {
@@ -54,6 +55,7 @@ class InputManager {
     if (keyReleasedEvents.find(key) == keyReleasedEvents.end()) {
       return false;
     }
+    return keyReleasedEvents[key];
   }
 
   bool IsKeyDown(sf::Keyboard::Key key) {

@@ -71,7 +71,7 @@ void GameManager::InitGame() {
   b2CreateSegmentShape(groundId, &shapeDef, &segment);
 
   bodyDef.position = pixelToMeter({WORLD_WIDTH / 2.f, 44.f});
-  b2BodyId ceilingId = b2CreateBody(worldId, &bodyDef);
+  ceilingId = b2CreateBody(worldId, &bodyDef);
   b2CreateSegmentShape(ceilingId, &shapeDef, &segment);
 
   bodyDef.position = pixelToMeter({150, 0});
@@ -79,9 +79,11 @@ void GameManager::InitGame() {
 
   // Initialize player
   vehicles.clear();
-  vehicles.emplace_back(std::make_unique<Jetpack>());
+  AddVehicle("jetpack", std::make_unique<Jetpack>());
+  AddVehicle("gravitySuit", std::make_unique<GravitySuit>());
+  // AddVehicle("stomper", std::make_unique<Stomper>());
 
-  auto player = std::make_unique<Player>(vehicles[0].get());
+  auto player = std::make_unique<Player>(GetVehicle("jetpack"));
   this->player = player.get();
   gameObjectManager->AddGameObject(std::move(player));
 
@@ -131,4 +133,13 @@ void GameManager::EndGame() {
 void GameManager::GameOver() {
   gameState = GameState::GAME_OVER;
   std::cerr << "Game Over" << std::endl;
+}
+
+void GameManager::AddVehicle(std::string name,
+                             std::unique_ptr<Vehicle>&& vehicle) {
+  vehicles[name] = std::move(vehicle);
+}
+
+Vehicle* GameManager::GetVehicle(const std::string& name) {
+  return vehicles[name].get();
 }

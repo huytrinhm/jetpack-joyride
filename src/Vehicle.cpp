@@ -9,9 +9,8 @@
 #include "Utilities.h"
 #include "box2d/box2d.h"
 
-b2BodyId createJetpackBody(Player* player) {
+b2BodyId createVehicleBody(Player* player, b2Vec2 scale, float mass = 1.0f) {
   const sf::Vector2f position = player->transform.position;
-  const b2Vec2 scale = pixelToMeter({18, 36});
 
   b2BodyDef bodyDef = b2DefaultBodyDef();
   bodyDef.type = b2_dynamicBody;
@@ -32,7 +31,7 @@ b2BodyId createJetpackBody(Player* player) {
   b2CreateCapsuleShape(bodyId, &shapeDef, &capsule);
 
   b2MassData massData = b2Body_GetMassData(bodyId);
-  massData.mass = 1;
+  massData.mass = mass;
   b2Body_SetMassData(bodyId, massData);
 
   b2PrismaticJointDef jointDef = b2DefaultPrismaticJointDef();
@@ -165,7 +164,7 @@ Jetpack::Jetpack() : bulletPool(30) {
 void Jetpack::Attach(Player* player) {
   this->player = player;
   animator.gameObject = (GameObject*)player;
-  bodyId = createJetpackBody(player);
+  bodyId = createVehicleBody(player, pixelToMeter({18, 36}));
   player->AddComponent<PhysicBody>(bodyId);
   animator.PlayAnimation("running");
   isThrusting = false;
@@ -231,3 +230,98 @@ void Jetpack::Render(GameRenderer& renderer) {
 }
 
 void Jetpack::Destroy() {}
+
+GravitySuit::GravitySuit() : Vehicle(true) {
+  animator.SetTexture(AssetManager::Instance().GetTexture("gravitySuit"));
+  Animation* animation = nullptr;
+
+  animation = animator.AddAnimation("running", true);
+  for (int i = 0; i < 6; i++)
+    animation->frames.emplace_back(sf::IntRect{i * 42, 0 * 42, 42, 42}, 0.1f,
+                                   sf::Vector2f{0, 0});
+
+  animation = animator.AddAnimation("flipping", false);
+  for (int i = 0; i < 6; i++)
+    animation->frames.emplace_back(sf::IntRect{i * 42, 1 * 42, 42, 42}, 0.1f,
+                                   sf::Vector2f{0, 0});
+
+  animation = animator.AddAnimation("runningInverted", true);
+  for (int i = 0; i < 6; i++)
+    animation->frames.emplace_back(sf::IntRect{i * 42, 3 * 42, 42, 42}, 0.1f,
+                                   sf::Vector2f{0, 0});
+
+  animation = animator.AddAnimation("flippingInverted", false);
+  for (int i = 0; i < 6; i++)
+    animation->frames.emplace_back(sf::IntRect{i * 42, 2 * 42, 42, 42}, 0.1f,
+                                   sf::Vector2f{0, 0});
+}
+
+void GravitySuit::Attach(Player* player) {
+  this->player = player;
+  animator.gameObject = (GameObject*)player;
+  bodyId = createVehicleBody(player, pixelToMeter({18, 36}), 0.05f);
+  player->AddComponent<PhysicBody>(bodyId)->SetGravityScale(3.0f);
+  canUseSkill = true;
+  isInverted = false;
+}
+
+void GravitySuit::Update() {
+  int bodyContactCapacity = b2Body_GetContactCapacity(bodyId);
+  b2ContactData contactData[bodyContactCapacity];
+  int bodyContactCount =
+      b2Body_GetContactData(bodyId, contactData, bodyContactCapacity);
+
+  onGround = false;
+  for (int i = 0; i < bodyContactCount; i++) {
+    b2BodyId bodyIdA = b2Shape_GetBody(contactData[i].shapeIdA);
+    b2BodyId bodyIdB = b2Shape_GetBody(contactData[i].shapeIdB);
+    if (isInverted) {
+      if (B2_ID_EQUALS(bodyIdA, GameManager::Instance().ceilingId) ||
+          B2_ID_EQUALS(bodyIdB, GameManager::Instance().ceilingId)) {
+        onGround = true;
+        break;
+      }
+    } else {
+      if (B2_ID_EQUALS(bodyIdA, GameManager::Instance().groundId) ||
+          B2_ID_EQUALS(bodyIdB, GameManager::Instance().groundId)) {
+        onGround = true;
+        break;
+      }
+    }
+  }
+
+  if (!InputManager::Instance().IsKeyDown(sf::Keyboard::Space)) {
+    canUseSkill = true;
+  }
+
+  if (InputManager::Instance().IsKeyDown(sf::Keyboard::Space) && canUseSkill) {
+    canUseSkill = false;
+    isInverted = !isInverted;
+    player->GetComponent<PhysicBody>()->SetGravityScale(isInverted ? -3.0f
+                                                                   : 3.0f);
+  }
+
+  if (isInverted) {
+    if (onGround) {
+      animator.PlayAnimation("runningInverted");
+    } else {
+      animator.PlayAnimation("flipping");
+    }
+  } else {
+    if (onGround) {
+      animator.PlayAnimation("running");
+    } else {
+      animator.PlayAnimation("flippingInverted");
+    }
+  }
+
+  animator.Update();
+}
+
+void GravitySuit::FixedUpdate() {}
+
+void GravitySuit::Render(GameRenderer& renderer) {
+  animator.Render(renderer);
+}
+
+void GravitySuit::Destroy() {}
