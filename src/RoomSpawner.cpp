@@ -14,7 +14,7 @@ void RoomSpawner::Spawn() {
   }
 
   int rng = randomIntInRange(0, 8);
-  if (rng < 8) {
+  if (rng < 6) {
     SpawnZapper();
   } else {
     SpawnVehiclePickup();

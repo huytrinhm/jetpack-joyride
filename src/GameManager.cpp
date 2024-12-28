@@ -149,7 +149,7 @@ void GameManager::EndGame() {
 
 void GameManager::GameOver() {
   gameState = GameState::GAME_OVER;
-  SoundManager::Instance().PlaySound("gameOverSound");
+  // SoundManager::Instance().PlaySound("gameOverSound");
   std::cerr << "Game Over" << std::endl;
 }
 

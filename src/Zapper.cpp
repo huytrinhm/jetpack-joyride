@@ -59,6 +59,9 @@ Zapper::Zapper(ZapperType zapperType,
   b2CreateCapsuleShape(bodyId, &shapeDef, &capsule);
 
   this->AddComponent<PhysicBody>(bodyId);
+
+  elapsedTime = 0;
+  currentFrame = 0;
 }
 
 sf::IntRect getZapperEffectFrame(int frame) {
@@ -74,18 +77,18 @@ void Zapper::Render(GameRenderer& renderer) {
 
   for (int i = 0; i < length; i++) {
     zapperEffectSprite.setPosition({32 + 16.f * i, 1});
-    zapperEffectSprite.setTextureRect(getZapperEffectFrame(i));
+    zapperEffectSprite.setTextureRect(getZapperEffectFrame(i + currentFrame));
     zapperRenderTexture.draw(zapperEffectSprite);
   }
 
   // Render head
   zapperHeadSprite.setPosition({16 + 8, 16});
-  zapperHeadSprite.setTextureRect(getZapperHeadFrame(0));
+  zapperHeadSprite.setTextureRect(getZapperHeadFrame(currentFrame % 4));
   zapperHeadSprite.setRotation(90);
   zapperRenderTexture.draw(zapperHeadSprite);
 
   zapperHeadSprite.setPosition({length * 16.f + 32 + 16 - 8, 16});
-  zapperHeadSprite.setTextureRect(getZapperHeadFrame(0));
+  zapperHeadSprite.setTextureRect(getZapperHeadFrame(currentFrame % 4));
   zapperHeadSprite.setRotation(-90);
   zapperRenderTexture.draw(zapperHeadSprite);
 
@@ -96,4 +99,9 @@ void Zapper::Render(GameRenderer& renderer) {
 
 void Zapper::Update() {
   zapperSprite.setPosition(transform.position);
+  elapsedTime += GameManager::Instance().deltaTime;
+  if (elapsedTime >= 0.1f) {
+    currentFrame = (currentFrame + 1) % 16;
+    elapsedTime = 0;
+  }
 }

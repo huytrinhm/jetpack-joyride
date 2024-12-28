@@ -30,6 +30,7 @@ class Zapper : public HarmfulGameObject {
   int length;
   bool isActive;
   int currentFrame;
+  float elapsedTime;
 };
 
 #endif  // ZAPPER_H
