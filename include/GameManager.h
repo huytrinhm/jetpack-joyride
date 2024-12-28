@@ -51,6 +51,8 @@ class GameManager {
 
   sf::Clock clock;
   float accumulatedTime;
+  sf::Text distanceText;
+  float distanceTravelled;
 };
 
 #endif  // GAMEMANAGER_H

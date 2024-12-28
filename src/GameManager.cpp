@@ -41,6 +41,12 @@ GameManager::GameManager() {
                      std::vector<std::pair<sf::IntRect, float>>{
                          {sf::IntRect(2 * 128, 0, 128, 512), 0.5f},
                          {sf::IntRect(4 * 128, 0, 4 * 128, 512), 0.5f}});
+
+  distanceTravelled = 0.0f;
+  distanceText.setFont(AssetManager::Instance().GetFont("Jetpackia"));
+  distanceText.setCharacterSize(16);
+  distanceText.setFillColor(sf::Color::White);
+  distanceText.setPosition(10, 10);
 }
 
 void GameManager::InitGame() {
@@ -111,6 +117,7 @@ void GameManager::MainLoop() {
   unscaledDeltaTime = clock.restart().asSeconds();
   deltaTime = unscaledDeltaTime * timeScale;
   accumulatedTime += deltaTime;
+  scrollSpeed += 0.1f * deltaTime;
 
   // std::cerr << "FPS: " << 1.0f / game.deltaTime << std::endl;
 
@@ -121,11 +128,18 @@ void GameManager::MainLoop() {
   }
   gameObjectManager->UpdateAll();
 
+  // Update distance travelled
+  distanceTravelled += scrollSpeed * deltaTime;
+  distanceText.setString(
+      "Distance: " + std::to_string(static_cast<int>(distanceTravelled / 100)) +
+      "m");
+
   // Render
   renderTarget->clear(sf::Color::Black);
   gameObjectManager->RenderAll(*gameRenderer);
   gameRenderer->Render(*renderTarget);
-  b2World_Draw(worldId, &DebugDraw::debugDraw);
+  renderTarget->draw(distanceText);
+  // b2World_Draw(worldId, &DebugDraw::debugDraw);
   renderTarget->display();
 }
 
