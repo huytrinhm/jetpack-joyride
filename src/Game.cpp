@@ -41,7 +41,7 @@ int main() {
 
     switch (game.gameState) {
       case GameState::MENU:
-        menu.DisplayMenu(renderTexture);
+        menu.DisplayMenu(renderTexture, renderSprite.getGlobalBounds());
         window.clear();
         window.draw(renderSprite);
         window.display();

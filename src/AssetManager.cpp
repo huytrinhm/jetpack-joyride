@@ -32,9 +32,8 @@ void AssetManager::Initialize() {
   LoadTexture("shieldField", "assets/shieldField.png");
   LoadTexture("rocket", "assets/rocket.png");
   LoadTexture("rocketAlert", "assets/rocketAlert.png");
-  LoadTexture("menuBackground", "assets/menu.png");
-  LoadTexture("playButton", "assets/play.png");
-  LoadTexture("quitButton", "assets/quit.png");
+  LoadTexture("menuBackground", "assets/menuBackground.png");
+  LoadTexture("menuButtons", "assets/menuButtons.png");
 
   LoadFont("Jetpackia", "assets/Jetpackia.ttf");
 }

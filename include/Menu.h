@@ -5,7 +5,8 @@
 class Menu {
  public:
   Menu();
-  void DisplayMenu(sf::RenderTexture& renderTarget);
+  void DisplayMenu(sf::RenderTexture& renderTarget,
+                   const sf::FloatRect& renderBounds);
 
  private:
   sf::Sprite background;
