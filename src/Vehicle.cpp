@@ -6,6 +6,7 @@
 #include "Engine/PhysicBody.h"
 #include "GameManager.h"
 #include "Player.h"
+#include "SoundManager.h"
 #include "Utilities.h"
 #include "box2d/box2d.h"
 
@@ -192,8 +193,10 @@ void Jetpack::Update() {
   if (InputManager::Instance().IsKeyDown(sf::Keyboard::Space)) {
     isThrusting = true;
     animator.PlayAnimation("flying");
+    SoundManager::Instance().PlaySound("fire");
   } else {
     isThrusting = false;
+    SoundManager::Instance().StopSound("fire");
     if (onGround) {
       animator.PlayAnimation("running");
     } else {
@@ -381,6 +384,7 @@ void Stomper::Update() {
     stateTime = 0;
     animator.PlayAnimation("running");
     canThrust = true;
+    SoundManager::Instance().StopSound("stomper_thrust");
   }
 
   if (!InputManager::Instance().IsKeyDown(sf::Keyboard::Space) && onGround) {
@@ -397,6 +401,7 @@ void Stomper::Update() {
         stateTime = 0;
         animator.PlayAnimation("jumping");
         player->GetComponent<PhysicBody>()->ApplyImpulse({0, -jumpForce});
+        SoundManager::Instance().PlaySound("stomper_jump", true);
       }
       break;
     case StomperState::JUMPING:
@@ -410,6 +415,7 @@ void Stomper::Update() {
         state = StomperState::FALLING;
         stateTime = 0;
         animator.PlayAnimation("running");
+        SoundManager::Instance().StopSound("stomper_thrust");
       } else {
         thrustForce -= thrustDecay * GameManager::Instance().deltaTime;
         if (thrustForce <= 0) {
@@ -418,6 +424,7 @@ void Stomper::Update() {
           animator.PlayAnimation("running");
         }
         canJump = false;
+        SoundManager::Instance().PlaySound("stomper_thrust");
       }
       break;
     case StomperState::FALLING:

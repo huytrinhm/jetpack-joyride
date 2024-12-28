@@ -3,6 +3,7 @@
 #include "Config.h"
 #include "Engine/PhysicBody.h"
 #include "GameManager.h"
+#include "SoundManager.h"
 #include "Utilities.h"
 
 Rocket::Rocket(float delayDuration, float aimDuration, float lockDuration)
@@ -50,6 +51,7 @@ void Rocket::Update() {
         state = State::Lock;
         stateTime = 0.0f;
         animator->PlayAnimation("lock");
+        SoundManager::Instance().PlaySound("rocket", true);
       }
       break;
     case State::Lock:

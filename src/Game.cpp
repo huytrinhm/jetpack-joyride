@@ -4,6 +4,7 @@
 #include "Engine/InputManager.h"
 #include "GameManager.h"
 #include "Menu.h"
+#include "SoundManager.h"
 #include "Utilities.h"
 
 int main() {
@@ -19,6 +20,17 @@ int main() {
   updateLetterbox(window, renderSprite);
 
   AssetManager::Instance().Initialize();
+
+  SoundManager::Instance().LoadMusic("gameplayMusic",
+                                     "assets/JetpackJoyrideMusic.wav");
+
+  SoundManager::Instance().LoadSound("rocket", "assets/rocket.wav");
+  SoundManager::Instance().LoadSound("fire", "assets/jetpack_fireLP.ogg");
+  SoundManager::Instance().LoadSound("stomper_jump", "assets/mech_jump.ogg");
+  SoundManager::Instance().LoadSound("stomper_thrust",
+                                     "assets/mech_boost_lp.ogg");
+
+  SoundManager::Instance().PlayMusic("gameplayMusic");
 
   GameManager& game = GameManager::Instance();
   game.renderTarget = &renderTexture;

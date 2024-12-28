@@ -19,6 +19,7 @@
 #include "RocketSpawner.h"
 #include "Room.h"
 #include "RoomSpawner.h"
+#include "SoundManager.h"
 #include "b2DrawSFML.h"
 
 GameManager::GameManager() {
@@ -98,6 +99,8 @@ void GameManager::InitGame() {
 
   gameObjectManager->StartAll();
 
+  SoundManager::Instance().PlayMusic("gameplayMusic");
+
   clock = sf::Clock();
   accumulatedTime = 0.0f;
   gameState = GameState::PLAYING;
@@ -132,6 +135,7 @@ void GameManager::EndGame() {
 
 void GameManager::GameOver() {
   gameState = GameState::GAME_OVER;
+  SoundManager::Instance().PlaySound("gameOverSound");
   std::cerr << "Game Over" << std::endl;
 }
 
