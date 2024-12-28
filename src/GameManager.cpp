@@ -81,7 +81,7 @@ void GameManager::InitGame() {
   vehicles.clear();
   AddVehicle("jetpack", std::make_unique<Jetpack>());
   AddVehicle("gravitySuit", std::make_unique<GravitySuit>());
-  // AddVehicle("stomper", std::make_unique<Stomper>());
+  AddVehicle("stomper", std::make_unique<Stomper>());
 
   auto player = std::make_unique<Player>(GetVehicle("jetpack"));
   this->player = player.get();

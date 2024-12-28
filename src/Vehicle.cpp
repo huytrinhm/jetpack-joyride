@@ -325,3 +325,124 @@ void GravitySuit::Render(GameRenderer& renderer) {
 }
 
 void GravitySuit::Destroy() {}
+
+Stomper::Stomper() {
+  animator.SetTexture(AssetManager::Instance().GetTexture("stomper"));
+  Animation* animation = nullptr;
+
+  animation = animator.AddAnimation("running", true);
+  for (int i = 0; i < 6; i++)
+    animation->frames.emplace_back(sf::IntRect{i * 85, 0 * 85, 85, 85}, 0.1f,
+                                   sf::Vector2f{0, 0});
+
+  animation = animator.AddAnimation("jumping", false);
+  for (int i = 0; i < 6; i++)
+    animation->frames.emplace_back(sf::IntRect{i * 85, 1 * 85, 85, 85}, 0.1f,
+                                   sf::Vector2f{0, 0});
+
+  animation = animator.AddAnimation("thrusting", true);
+  for (int i = 0; i < 2; i++)
+    animation->frames.emplace_back(sf::IntRect{i * 85, 2 * 85, 85, 85}, 0.1f,
+                                   sf::Vector2f{0, 0});
+}
+
+void Stomper::Attach(Player* player) {
+  this->player = player;
+  animator.gameObject = (GameObject*)player;
+  bodyId = createVehicleBody(player, pixelToMeter({30, 40}));
+  player->AddComponent<PhysicBody>(bodyId);
+  b2Body_SetGravityScale(bodyId, 4.0f);
+  animator.PlayAnimation("running");
+  state = StomperState::FALLING;
+  stateTime = 0;
+  canThrust = true;
+  canJump = false;
+}
+
+void Stomper::Update() {
+  int bodyContactCapacity = b2Body_GetContactCapacity(bodyId);
+  b2ContactData contactData[bodyContactCapacity];
+  int bodyContactCount =
+      b2Body_GetContactData(bodyId, contactData, bodyContactCapacity);
+
+  onGround = false;
+  for (int i = 0; i < bodyContactCount; i++) {
+    b2BodyId bodyIdA = b2Shape_GetBody(contactData[i].shapeIdA);
+    b2BodyId bodyIdB = b2Shape_GetBody(contactData[i].shapeIdB);
+    if (B2_ID_EQUALS(bodyIdA, GameManager::Instance().groundId) ||
+        B2_ID_EQUALS(bodyIdB, GameManager::Instance().groundId)) {
+      onGround = true;
+      break;
+    }
+  }
+
+  if (onGround && state != StomperState::JUMPING) {
+    state = StomperState::RUNNING;
+    stateTime = 0;
+    animator.PlayAnimation("running");
+    canThrust = true;
+  }
+
+  if (!InputManager::Instance().IsKeyDown(sf::Keyboard::Space) && onGround) {
+    canJump = true;
+  }
+
+  stateTime += GameManager::Instance().deltaTime;
+
+  switch (state) {
+    case StomperState::RUNNING:
+      if (InputManager::Instance().IsKeyDown(sf::Keyboard::Space) && canJump) {
+        canJump = false;
+        state = StomperState::JUMPING;
+        stateTime = 0;
+        animator.PlayAnimation("jumping");
+        player->GetComponent<PhysicBody>()->ApplyImpulse({0, -jumpForce});
+      }
+      break;
+    case StomperState::JUMPING:
+      if (stateTime >= jumpTime) {
+        state = StomperState::FALLING;
+        stateTime = 0;
+      }
+      break;
+    case StomperState::THRUSTING:
+      if (!InputManager::Instance().IsKeyDown(sf::Keyboard::Space)) {
+        state = StomperState::FALLING;
+        stateTime = 0;
+        animator.PlayAnimation("running");
+      } else {
+        thrustForce -= thrustDecay * GameManager::Instance().deltaTime;
+        if (thrustForce <= 0) {
+          state = StomperState::FALLING;
+          stateTime = 0;
+          animator.PlayAnimation("running");
+        }
+        canJump = false;
+      }
+      break;
+    case StomperState::FALLING:
+      if (InputManager::Instance().IsKeyDown(sf::Keyboard::Space) &&
+          canThrust) {
+        state = StomperState::THRUSTING;
+        stateTime = 0;
+        animator.PlayAnimation("thrusting");
+        thrustForce = maxThrustForce;
+        canThrust = false;
+      }
+      break;
+  }
+
+  animator.Update();
+}
+
+void Stomper::FixedUpdate() {
+  if (state == StomperState::THRUSTING) {
+    player->GetComponent<PhysicBody>()->ApplyForce({0, -thrustForce});
+  }
+}
+
+void Stomper::Render(GameRenderer& renderer) {
+  animator.Render(renderer);
+}
+
+void Stomper::Destroy() {}

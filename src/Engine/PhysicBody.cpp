@@ -34,3 +34,7 @@ PhysicBody::~PhysicBody() {
 void PhysicBody::SetGravityScale(float scale) {
   b2Body_SetGravityScale(bodyId, scale);
 }
+
+void PhysicBody::ApplyImpulse(b2Vec2 impulse) {
+  b2Body_ApplyLinearImpulseToCenter(bodyId, impulse, true);
+}

@@ -9,6 +9,7 @@ class PhysicBody : public Component {
   PhysicBody(b2BodyId bodyId);
   void FixedUpdate() override;
   void ApplyForce(b2Vec2 force);
+  void ApplyImpulse(b2Vec2 impulse);
   void SetVelocity(b2Vec2 velocity);
   void SetGravityScale(float scale);
   ~PhysicBody();

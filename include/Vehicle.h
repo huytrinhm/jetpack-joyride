@@ -86,21 +86,28 @@ class GravitySuit : public Vehicle {
   bool isInverted;
 };
 
-// class Stomper : public Vehicle {
-//  public:
-//   Stomper();
-//   void Attach(Player* player) override;
-//   void Update() override;
-//   void FixedUpdate() override;
-//   void Render(GameRenderer& renderer) override;
-//   void Destroy() override;
+enum class StomperState { RUNNING, JUMPING, THRUSTING, FALLING };
 
-//  private:
-//   bool isThrusting;
-//   float thrustForce = 40.f;
-//   float thrustDecay = 10.f;
-//   float jumpForce = 20.f;
-//   bool onGround;
-// };
+class Stomper : public Vehicle {
+ public:
+  Stomper();
+  void Attach(Player* player) override;
+  void Update() override;
+  void FixedUpdate() override;
+  void Render(GameRenderer& renderer) override;
+  void Destroy() override;
+
+ private:
+  StomperState state;
+  float maxThrustForce = 50.f;
+  float thrustForce;
+  float thrustDecay = 10.f;
+  float jumpForce = 20.f;
+  float jumpTime = 0.2f;
+  float stateTime;
+  bool canThrust;
+  bool canJump;
+  bool onGround;
+};
 
 #endif  // VEHICLE_H

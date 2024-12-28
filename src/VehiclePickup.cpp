@@ -60,8 +60,7 @@ void VehiclePickup::Collide(Player* player) {
       player->Equip(GameManager::Instance().GetVehicle("gravitySuit"));
       break;
     case VehicleType::STOMPER:
-      player->Equip(GameManager::Instance().GetVehicle("gravitySuit"));
-      //   player->Equip(GameManager::Instance().GetVehicle("stomper"));
+      player->Equip(GameManager::Instance().GetVehicle("stomper"));
       break;
   }
 
