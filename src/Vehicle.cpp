@@ -326,7 +326,7 @@ void GravitySuit::Render(GameRenderer& renderer) {
 
 void GravitySuit::Destroy() {}
 
-Stomper::Stomper() {
+Stomper::Stomper() : Vehicle(true) {
   animator.SetTexture(AssetManager::Instance().GetTexture("stomper"));
   Animation* animation = nullptr;
 

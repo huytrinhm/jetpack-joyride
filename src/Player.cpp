@@ -31,6 +31,13 @@ void Player::Start() {
 }
 
 void Player::Update() {
+  if (isInvincible) {
+    invincibleTimer -= GameManager::Instance().deltaTime;
+    if (invincibleTimer <= 0) {
+      isInvincible = false;
+    }
+  }
+
   vehicle->Update();
 }
 
@@ -65,8 +72,11 @@ void Player::Equip(Vehicle* vehicle) {
 }
 
 void Player::HandleHarmfulCollision() {
+  if (isInvincible)
+    return;
   if (vehicle->isDestroyable) {
     vehicle->Destroy();
+    SetInvincible(true, 1.0f);
     Equip(defaultVehicle);
   } else if (isShielded) {
     SetShield(false);
@@ -91,4 +101,9 @@ bool Player::InVehicle() {
 
 sf::Vector2f Player::GetPosition() const {
   return transform.position;
+}
+
+void Player::SetInvincible(bool isInvincible, float duration) {
+  this->isInvincible = isInvincible;
+  this->invincibleTimer = duration;
 }

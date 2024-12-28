@@ -24,10 +24,13 @@ class Player : public GameObject {
   sf::Vector2f GetPosition() const;
 
  private:
+  void SetInvincible(bool isInvincible, float duration);
   Vehicle* vehicle;
   Vehicle* defaultVehicle;
   bool isShielded = false;
   Animator* shieldAnimator;
+  bool isInvincible = false;
+  float invincibleTimer;
 };
 
 #endif  // PLAYER_H
