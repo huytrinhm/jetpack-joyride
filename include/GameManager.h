@@ -35,9 +35,11 @@ class GameManager {
   void MainLoop();
   void EndGame();
   void GameOver();
+  void Fastforward();
 
   void AddVehicle(std::string name, std::unique_ptr<Vehicle>&& vehicle);
   Vehicle* GetVehicle(const std::string& name);
+  bool isFastforward;
 
  private:
   GameManager();
@@ -53,6 +55,7 @@ class GameManager {
   float accumulatedTime;
   sf::Text distanceText;
   float distanceTravelled;
+  float fastforwardTimer;
 };
 
 #endif  // GAMEMANAGER_H

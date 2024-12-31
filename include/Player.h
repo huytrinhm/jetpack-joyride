@@ -21,10 +21,10 @@ class Player : public GameObject {
   void SetShield(bool isShielded);
   bool IsShielded();
   bool InVehicle();
+  void SetInvincible(bool isInvincible, float duration);
   sf::Vector2f GetPosition() const;
 
  private:
-  void SetInvincible(bool isInvincible, float duration);
   Vehicle* vehicle;
   Vehicle* defaultVehicle;
   bool isShielded = false;

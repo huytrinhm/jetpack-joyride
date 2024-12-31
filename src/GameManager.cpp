@@ -110,11 +110,19 @@ void GameManager::InitGame() {
   clock = sf::Clock();
   accumulatedTime = 0.0f;
   gameState = GameState::PLAYING;
+  isFastforward = false;
 }
 
 void GameManager::MainLoop() {
   // Update
   unscaledDeltaTime = clock.restart().asSeconds();
+  if (timeScale != 1.0f) {
+    fastforwardTimer -= unscaledDeltaTime;
+    if (fastforwardTimer <= 0.0f) {
+      timeScale = 1.0f;
+      isFastforward = false;
+    }
+  }
   deltaTime = unscaledDeltaTime * timeScale;
   accumulatedTime += deltaTime;
   scrollSpeed += 0.1f * deltaTime;
@@ -160,4 +168,10 @@ void GameManager::AddVehicle(std::string name,
 
 Vehicle* GameManager::GetVehicle(const std::string& name) {
   return vehicles[name].get();
+}
+
+void GameManager::Fastforward() {
+  timeScale = 2.0f;
+  fastforwardTimer = 5.0f;
+  isFastforward = true;
 }

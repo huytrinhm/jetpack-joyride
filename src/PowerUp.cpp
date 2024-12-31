@@ -79,10 +79,24 @@ ShieldPickup::ShieldPickup(sf::Vector2f position,
                            float amplitude)
     : Pickup(position, "shield", period, phi, amplitude) {}
 
+void FastforwardPickup::Collide(Player* player) {
+  isActive = false;
+  CollidableGameObject::isActive = false;
+
+  GameManager::Instance().Fastforward();
+  player->SetInvincible(true, 10.0f);
+}
+
+FastforwardPickup::FastforwardPickup(sf::Vector2f position,
+                                     float period,
+                                     float phi,
+                                     float amplitude)
+    : Pickup(position, "ff", period, phi, amplitude) {}
+
 PickupSpawner::PickupSpawner() : ScrollerSpawner(2600, 400) {}
 
 void PickupSpawner::Spawn() {
-  int options = 0;
+  int options = 1;
   if (!GameManager::Instance().player->IsShielded() &&
       !GameManager::Instance().player->InVehicle())
     options++;
@@ -93,6 +107,9 @@ void PickupSpawner::Spawn() {
   int choice = randomIntInRange(0, options - 1);
   switch (choice) {
     case 0:
+      SpawnFastforwardPickup();
+      break;
+    case 1:
       SpawnShieldPickup();
       break;
     default:
@@ -106,6 +123,16 @@ void PickupSpawner::SpawnShieldPickup() {
   float amplitude = randomFloatInRange(30.0f, 50.0f);
 
   objects.emplace_back(std::make_unique<ShieldPickup>(
+      sf::Vector2f{WORLD_WIDTH + 100, WORLD_HEIGHT / 2}, period, phi,
+      amplitude));
+}
+
+void PickupSpawner::SpawnFastforwardPickup() {
+  float period = randomFloatInRange(1.5f, 3.5f);
+  float phi = randomFloatInRange(0.0f, 2 * B2_PI);
+  float amplitude = randomFloatInRange(30.0f, 50.0f);
+
+  objects.emplace_back(std::make_unique<FastforwardPickup>(
       sf::Vector2f{WORLD_WIDTH + 100, WORLD_HEIGHT / 2}, period, phi,
       amplitude));
 }

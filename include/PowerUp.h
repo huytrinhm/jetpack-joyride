@@ -35,6 +35,15 @@ class ShieldPickup : public Pickup {
   void Collide(Player* player) override;
 };
 
+class FastforwardPickup : public Pickup {
+ public:
+  FastforwardPickup(sf::Vector2f position,
+                    float period,
+                    float phi,
+                    float amplitude);
+  void Collide(Player* player) override;
+};
+
 class PickupSpawner : public ScrollerSpawner {
  public:
   PickupSpawner();
@@ -43,6 +52,7 @@ class PickupSpawner : public ScrollerSpawner {
   void Spawn() override;
 
   void SpawnShieldPickup();
+  void SpawnFastforwardPickup();
 };
 
 #endif  // POWERUP_H
